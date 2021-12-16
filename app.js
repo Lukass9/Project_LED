@@ -13,7 +13,7 @@ const answers = []
 const chose = []
 const btnSub = app.querySelector('.btn')
 const btnWrap = app.querySelectorAll('.btn_wrapp_photo')
-const styleToggle = true;
+let styleToggle = true;
 let withBtb;
 const title = ["Wybierz źródło światła", "Wybierz  kolor"]
 let counterTitle = 0;
@@ -32,7 +32,6 @@ function changeScene(title, productTitle,) {
             el.innerHTML = productTitle[counterTitle][counterProductTitle]
             counterProductTitle++
         }
-        
     })
     counterTitle++
 }
@@ -69,7 +68,7 @@ btnWrap.forEach(btn => {
 })
 btnSub.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (withBtb) {
+    if (withBtb && questions.length > answers.length) {
         answers.push(withBtb);
         changeScene(title, productTitle)
     }
@@ -86,47 +85,6 @@ btnSub.addEventListener('click', (e) => {
     }
 })
 
-function getChoseProducts() {
-    let allProductFromCategory = {}
-    const allProductFromCategoryId = [];
-    const searchedProducts = [];
-    
-    function assignId(){
-        allProductFromCategory.list.forEach(el => {
-            allProductFromCategoryId.push(el.id)
-        })
-    }
-    function findPhrase(arr, phrase, search, phrase2, search2) {
-        allProductFromCategoryId.forEach(el => {
-            frontAPI.getProduct(function (product) {
-               // console.log(product)
-                let counter = 0;
-                product.attributes.forEach((e) => {
-                    if (e.name.includes(phrase) && e.value.includes(search)){// "Rodzaj"
-                        counter++
-                    }
-                    else if (e.name.includes(phrase2) && e.value.includes(search2)){
-                        counter++
-                    }
-                    //console.log(counter)
-                })
-                if(counter>=2) arr.push(product) //searchedProducts.push(el)
-            }, {
-                id: el
-            });
-        })
-        console.log(searchedProducts);
-    }
-
-    frontAPI.getProductsFromCategory(function (products) {
-        allProductFromCategory = { ...products }
-        assignId()
-        findPhrase(searchedProducts, "Rodzaj", "COB" ,"Kolor", "biały")
-    }, {
-        id: 62, // chose[0] //62
-        urlParams: '?limit=50'
-    })
-} 
 
 
 
