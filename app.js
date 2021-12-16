@@ -13,31 +13,57 @@ const answers = []
 const chose = []
 const btnSub = app.querySelector('.btn')
 const btnWrap = app.querySelectorAll('.btn_wrapp_photo')
-let styleToggle = true;
 let withBtb;
-const title = ["Wybierz źródło światła", "Wybierz  kolor"]
 let counterTitle = 0;
-const productTitle = [["Reflektor na żarówkę", "Zintegrowane źródło światła"], ["Biała", "Czarna"], ["Kreator automatyczny", "Kreator manualny"]]
 const questions = [[62, 264], ["GU10", "COB"], ["biała", "czarna"]]
+let styleToggle = true;
 
-function changeScene(title, productTitle,) {
+function changeScene() {
+    const title = ["Wybierz źródło światła", "Wybierz  kolor"]
+    const productTitle = [["Reflektor na żarówkę", "Zintegrowane źródło światła"], ["Biała", "Czarna"], ["Kreator automatyczny", "Kreator manualny"]]
     const step = app.querySelector(".step");
     const photoWrap = app.querySelectorAll(".btn_wrapp_photo")
-    step.innerHTML = title[counterTitle] ? title[counterTitle] : ''
-    let counterProductTitle = 0
-    photoWrap.forEach(el => {
-        //console.dir(el.attributes.class.value)
-        console.log(productTitle[productTitle.length-1].length)
-        if( productTitle.length -1 >= counterTitle){
-            el.innerHTML = productTitle[counterTitle][counterProductTitle]
-            counterProductTitle++
-        }
-    })
+    
+    switch (counterTitle) {
+        case 0:
+            step.innerHTML = title[counterTitle] ? title[counterTitle] : ''
+            changeButton()
+            break;
+        case 1:
+            step.innerHTML = title[counterTitle] ? title[counterTitle] : ''
+            changeButton()
+            break;
+        case 2:
+            step.innerHTML = title[counterTitle] ? title[counterTitle] : ''
+            changeStyles(styleToggle)
+            styleToggle = !styleToggle 
+            changeButton()
+            yourChoice(answers)
+            break;
+        default:
+            changeStyles(styleToggle)
+            styleToggle = !styleToggle 
+            counterTitle = -1;
+            answers.length = 0
+            chose.length = 0
+            break;
+    }    
+
+    function changeButton(){
+        let counterProductTitle = 0
+        photoWrap.forEach(el => {
+            //console.dir(el.attributes.class.value)
+            console.log(productTitle[productTitle.length-1].length)
+            if( productTitle.length -1 >= counterTitle){
+                el.innerHTML = productTitle[counterTitle][counterProductTitle]
+                counterProductTitle++
+            }
+        })
+    }
     counterTitle++
 }
 function changeStyles(toggle) {
     console.log( "toggle " ,toggle)
-
     if(toggle){
         const wrapp = app.querySelector(".wrapp_chose")
         const photoWrap = wrapp.querySelectorAll(".btn_wrapp_photo")
@@ -68,28 +94,57 @@ btnWrap.forEach(btn => {
 })
 btnSub.addEventListener('click', (e) => {
     e.stopPropagation();
-    if (withBtb && questions.length > answers.length) {
+    if (withBtb) {
         answers.push(withBtb);
-        changeScene(title, productTitle)
+        changeScene()
     }
     console.log("answers", answers.length)
     console.log("counter", counterTitle)
 
     withBtb = null
-
-    if (answers.length >= 3) {
-        changeStyles(styleToggle)
-        styleToggle = !styleToggle 
-        yourChoice(answers)
-        // console.log( "styleToggle " ,styleToggle)
-    }
 })
 
 
-
-
-
-
+function getChoseProducts() {
+    let allProductFromCategory = {}
+    const allProductFromCategoryId = [];
+    const searchedProducts = [];
+    
+    function assignId(){
+        allProductFromCategory.list.forEach(el => {
+            allProductFromCategoryId.push(el.id)
+        })
+    }
+    function findPhrase(arr, phrase, search, phrase2, search2) {
+        allProductFromCategoryId.forEach(el => {
+            frontAPI.getProduct(function (product) {
+               // console.log(product)
+                let counter = 0;
+                product.attributes.forEach((e) => {
+                    if (e.name.includes(phrase) && e.value.includes(search)){// "Rodzaj"
+                        counter++
+                    }
+                    else if (e.name.includes(phrase2) && e.value.includes(search2)){
+                        counter++
+                    }
+                    //console.log(counter)
+                })
+                if(counter>=2) arr.push(product) //searchedProducts.push(el)
+            }, {
+                id: el
+            });
+        })
+        console.log(searchedProducts);
+    }
+    frontAPI.getProductsFromCategory(function (products) {
+        allProductFromCategory = { ...products }
+        assignId()
+        findPhrase(searchedProducts, "Rodzaj", "COB" ,"Kolor", "biały")
+    }, {
+        id: 62, // chose[0] //62
+        urlParams: '?limit=50'
+    })
+} 
 
 
 
