@@ -90,3 +90,10 @@
 .btn:hover{
     cursor: pointer;
 }
+.inp{
+    margin: 2%;
+    width: 15%;
+}
+.inp:invalid {
+    border: 1px solid red;
+}
