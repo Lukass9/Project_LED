@@ -8,7 +8,7 @@ lampy 264
 szyny i łączniki 275
 */
 const app = document.querySelector(".app")
-let btnWrap = document.querySelectorAll('.btn_wrapp_photo')
+//let btnWrap = document.querySelectorAll('.btn_wrapp_photo')
 const answers = []
 const chose = []
 const btnSub = app.querySelector('.btn')
@@ -17,7 +17,7 @@ let counterTitle = 0;
 const questions = [[62, 264], ["GU10", "COB"], ["biała", "czarna"]]
 let styleToggle = true;
 
-class AllShapes{
+class AllShapesCanvas{
     static setSizeCanva(element){
         const app = document.querySelector(".app")
         const btnWrap = app.querySelectorAll('.btn_wrapp_photo')
@@ -50,13 +50,13 @@ class AllShapes{
         btnWrap.forEach((btn, i)=>{
             const canv = btn.querySelector(".canv")
             const ctx = canv.getContext("2d");
-            AllShapes.setSizeCanva(canv)
+            AllShapesCanvas.setSizeCanva(canv)
             switch(i){
-            case 0: AllShapes.paintLine(ctx, canv)
+            case 0: AllShapesCanvas.paintLine(ctx, canv)
                 break;
-            case 1: AllShapes.paintL(ctx, canv)
+            case 1: AllShapesCanvas.paintL(ctx, canv)
                 break;
-            case 2: AllShapes.paintSquare(ctx, canv)
+            case 2: AllShapesCanvas.paintSquare(ctx, canv)
                 break;
             }
         })
@@ -89,28 +89,31 @@ function changeScene() {
             step.innerText = title[counterTitle] ? title[counterTitle] : ''
             changeStyles(styleToggle)
             styleToggle = !styleToggle 
-            
-            addCanvas()
+
+            const wrapBtn = app.querySelectorAll(".btn_wrapp_photo")
+            const img = wrapBtn[0].querySelector(".image") 
+            replaceToCanvas(img)
+
             addButton(counterTitle)
             photoWrap = app.querySelectorAll(".btn_wrapp_photo")
             changeButton()
-            AllShapes.drawAllShapes()
+            AllShapesCanvas.drawAllShapes()
             addEventListener("resize", (e)=>{
-                AllShapes.drawAllShapes()
+                AllShapesCanvas.drawAllShapes()
               })
-    // ten kawałek kodu działa, zamknąć to w jakiejś funkcji?
-    btnWrap = document.querySelectorAll('.btn_wrapp_photo')
-    btnWrap.forEach(btn => {
-        btn.addEventListener('focus', (e) => {
-            withBtb = btn.id
-        })
-    })
-    /////
+              
+            activeButton()
             //yourChose(answers)
             break;
         case 4:
-            const wrapp = document.querySelector(".wrapp_chose")
-            wrapp.remove()
+            const btn = document.querySelectorAll(".app .wrapp_chose button")
+            btn.forEach(e=>{
+                e.remove()
+            })
+            const wrapp = document.querySelector(".app .wrapp_chose")
+            createCalculationScene(wrapp)
+            changeStyles(styleToggle)
+            styleToggle = !styleToggle 
            
             console.log("tutaj")
             break;
@@ -126,12 +129,47 @@ function changeScene() {
             break;
     }
 
-    function addCanvas(){
-        const wrapBtn = app.querySelectorAll(".btn_wrapp_photo")
-        const img = wrapBtn[0].querySelector(".image") 
+    function createCalculationScene(wrapp){
+        const canvas = createCanva()
+        const text1 = createFormField("Długość odcinka A w metrach", "0.1" , "0.1")
+        const text2 = createFormField("Długość odcinka B w metrach", "0.1" , "0.1")
+        const text3 = createFormField("Ilość punktów świetlnych:", "1" , "1")
+
+        wrapp.appendChild(canvas)
+        wrapp.appendChild(text1)
+        wrapp.appendChild(text2)
+        wrapp.appendChild(text3)
+    }
+
+    function createCanva(){
         const canvas = document.createElement("canvas")
         canvas.classList.add("canv")
-        img.replaceWith(canvas)
+        return canvas
+    }
+
+    function createFormField(text, step, min){
+        const wrapp = document.createElement("div")
+        wrapp.classList.add("wrapp_chose")
+
+        const p = document.createElement("p")
+        p.innerText = text
+
+        const input = document.createElement("input")
+        input.classList.add("inp")
+        input.type = "number"
+        input.step = step
+        input.min = min
+        input.required = true
+
+        wrapp.appendChild(p)
+        wrapp.appendChild(input)
+
+        return wrapp
+    }
+
+    function replaceToCanvas(replaceElement){
+        const canvas = createCanva()
+        replaceElement.replaceWith(canvas)
        // wrapBtn.replaceChild(canvas, img)
     }
     
@@ -195,11 +233,16 @@ function yourChose(answers) {
     console.log("chose", chose)
 }
 
-btnWrap.forEach(btn => {
-    btn.addEventListener('focus', (e) => {
-        withBtb = btn.id
+function activeButton(){
+    btnWrap = document.querySelectorAll('.btn_wrapp_photo')
+    btnWrap.forEach(btn => {
+        btn.addEventListener('focus', (e) => {
+            withBtb = btn.id
+        })
     })
-})
+}
+activeButton()
+
 
 btnSub.addEventListener('click', (e) => {
     e.stopPropagation();
