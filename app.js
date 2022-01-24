@@ -7,17 +7,15 @@ szyny i łączniki 63
 lampy 264
 szyny i łączniki 275
 */
-const app = document.querySelector(".app")
-let btnWrap = document.querySelectorAll('.btn_wrapp_photo')
+
 const answers = []
 const chose = []
-const btnSub = app.querySelector('.btn')
 let withBtb;
 let counterTitle = 0;
 const questions = [[62, 264], ["GU10", "COB"], ["biała", "czarna"]]
 let styleToggle = true;
 
-class AllShapes{
+class AllShapesCanvas{
     static setSizeCanva(element){
         const app = document.querySelector(".app")
         const btnWrap = app.querySelectorAll('.btn_wrapp_photo')
@@ -42,7 +40,11 @@ class AllShapes{
       ctx.rect(canv.width/4, canv.height/4, canv.width/2, canv.height/2);
       ctx.stroke();
     }
-
+    static paintMark(ctx,canv){
+        ctx.font = "italic bold 18px Arial";
+        ctx.fillText("A", canv.width/5, canv.height/1.8);
+        ctx.fillText("B", canv.width/2, canv.height/1.09);
+      }
     
     static drawAllShapes(){
         const app = document.querySelector(".app")
@@ -50,13 +52,13 @@ class AllShapes{
         btnWrap.forEach((btn, i)=>{
             const canv = btn.querySelector(".canv")
             const ctx = canv.getContext("2d");
-            AllShapes.setSizeCanva(canv)
+            AllShapesCanvas.setSizeCanva(canv)
             switch(i){
-            case 0: AllShapes.paintLine(ctx, canv)
+            case 0: AllShapesCanvas.paintLine(ctx, canv)
                 break;
-            case 1: AllShapes.paintL(ctx, canv)
+            case 1: AllShapesCanvas.paintL(ctx, canv)
                 break;
-            case 2: AllShapes.paintSquare(ctx, canv)
+            case 2: AllShapesCanvas.paintSquare(ctx, canv)
                 break;
             }
         })
@@ -66,8 +68,9 @@ class AllShapes{
 function changeScene() {
     const title = ["Wybierz źródło światła", "Wybierz  kolor", "", "Schemat ułożenia"]
     const productTitle = [["Reflektor na żarówkę", "Zintegrowane źródło światła"], ["Biała", "Czarna"], ["Kreator automatyczny", "Kreator manualny"], ["Linia prosta", "Litera L", "Czworokąt"]]
-    const step = app.querySelector(".step");
-    let photoWrap = app.querySelectorAll(".btn_wrapp_photo")
+    const step = document.querySelector(".app .step");
+    let photoWrap = document.querySelectorAll(".app .btn_wrapp_photo")
+    let input = []
     
     switch (counterTitle) {
         case 0:
@@ -89,32 +92,88 @@ function changeScene() {
             step.innerText = title[counterTitle] ? title[counterTitle] : ''
             changeStyles(styleToggle)
             styleToggle = !styleToggle 
-            
-            addCanvas()
+
+            const wrapBtn = document.querySelectorAll(".app .btn_wrapp_photo")
+            const img = wrapBtn[0].querySelector(".image") 
+            replaceToCanvas(img)
+
             addButton(counterTitle)
-            photoWrap = app.querySelectorAll(".btn_wrapp_photo")
+            photoWrap = document.querySelectorAll(".app .btn_wrapp_photo")
             changeButton()
-            AllShapes.drawAllShapes()
+            AllShapesCanvas.drawAllShapes()
             addEventListener("resize", (e)=>{
-                AllShapes.drawAllShapes()
+                AllShapesCanvas.drawAllShapes()
               })
-    // ten kawałek kodu działa, zamknąć to w jakiejś funkcji?
-    btnWrap = document.querySelectorAll('.btn_wrapp_photo')
-    btnWrap.forEach(btn => {
-        btn.addEventListener('focus', (e) => {
-            withBtb = btn.id
-        })
-    })
-    /////
+              
+            activeButton()
             //yourChose(answers)
             break;
         case 4:
-            const wrapp = document.querySelector(".wrapp_chose")
-            wrapp.remove()
-           
-            console.log("tutaj")
+            step.innerText = title[counterTitle] ? title[counterTitle] : ''
+            const answer = answers[answers.length-1]
+            deleteScene()
+            const wrapp = document.querySelector(".app .wrapp_chose")
+            createCalculationScene(wrapp, answer)
+            changeStyles(styleToggle)
+            styleToggle = !styleToggle
+            const canv = document.querySelector(".app .wrapp_chose_v2 .canv")
+            const ctx = canv.getContext("2d");
+
+            validation()
+            const inp = document.querySelectorAll('.app input')
+            inp.forEach((el,i)=>{
+                el.addEventListener("change", validation)
+                el.addEventListener("change", ()=>{ // setInputValue
+                    input[i] =  +el.value
+                })
+            })
+            switch (answer) {
+                case '0':
+                    AllShapesCanvas.paintLine(ctx, canv)
+                    break;
+                case '1':
+                    AllShapesCanvas.paintL(ctx, canv)
+                    AllShapesCanvas.paintMark(ctx,canv)
+                    break;
+                case '2':
+                    AllShapesCanvas.paintSquare(ctx, canv)
+                    AllShapesCanvas.paintMark(ctx,canv)
+                    break;
+                default:
+                    alert("coś poszło nie tak")
+                    break;
+            }
             break;
         case 5:
+            const scene = document.querySelector(".app .wrapp_chose_v2")
+            scene.remove()
+            const railInp = answers[answers.length-1]
+            const calc = calculation(railInp[0])
+            // console.log(calc)
+
+            
+                const txt = document.createElement('p')
+                const p1 = document.createElement('p')
+                const p2 = document.createElement('p')
+                const p3 = document.createElement('p')
+                const p4 = document.createElement('p')
+                const elWrapp = document.createElement('div')
+                
+                txt.innerText = "Twój zestaw szynowy"
+                p1.innerText = "Listwa szynowa 1m: " + calc[0]   
+                p2.innerText = "Listwa szynowa 1.5m: " + calc[1]
+                p3.innerText = "Listwa szynowa 2m: " + calc[2]
+                p4.innerText = "Zostaje Ci reszty: " + calc[3]
+
+                elWrapp.appendChild(txt)
+                elWrapp.appendChild(p1)
+                elWrapp.appendChild(p2)
+                elWrapp.appendChild(p3)
+                elWrapp.appendChild(p4)
+
+                document.querySelector(".app .wrapp_title").after(elWrapp)
+
+            
 
             break;
         default:
@@ -126,17 +185,101 @@ function changeScene() {
             break;
     }
 
-    function addCanvas(){
-        const wrapBtn = app.querySelectorAll(".btn_wrapp_photo")
-        const img = wrapBtn[0].querySelector(".image") 
+    function calculation(inp){
+        let railStrip2m = Math.floor(inp / 2);
+        const rest = inp % 2;
+        
+        let railStrip1_5m = 0;
+        let railStrip1m = 0;
+        
+        if(rest<=1 && rest>0) railStrip1m++;
+        else if(rest>1 && rest<=1.5) railStrip1_5m++;
+        else if(rest>1.5) railStrip2m++;
+        
+        const piece = ((railStrip2m*2)+(railStrip1_5m*1.5)+railStrip1m - inp ).toFixed(2) 
+        const rail = [railStrip1m, railStrip1_5m, railStrip2m, piece]
+        return rail
+    }
+
+    function validation(){
+        const inp = document.querySelectorAll('.app input')
+        const sub = document.querySelector('.app .wrapp_button .btn')
+        let counter = 0
+        inp.forEach(el=>{
+          if(el.validity.valid) counter++
+        })
+        if(counter === inp.length){
+          sub.style.background = "#ff7e00"
+          sub.addEventListener('click', nextPage)
+          sub.disabled = false;
+          withBtb = input
+        }
+        else {
+            sub.style.background = "grey"
+            sub.removeEventListener("click", nextPage)
+            sub.disabled = true}
+      }
+
+    function deleteScene(){
+        const btn = document.querySelectorAll(".app .wrapp_chose button")
+            btn.forEach(e=>{
+                e.remove()
+            })
+    }
+
+    function createCalculationScene(wrapp, answer){
+        const canvas = createCanva()
+
+        const text0 = createFormField("Długość odcinka w metrach", "0.1" , "0.1")
+        const text1 = createFormField("Długość odcinka A w metrach", "0.1" , "0.1")
+        const text2 = createFormField("Długość odcinka B w metrach", "0.1" , "0.1")
+        const text3 = createFormField("Ilość punktów świetlnych:", "1" , "0")
+
+        wrapp.appendChild(canvas)
+        if(answer === '0'){
+            wrapp.appendChild(text0)
+        }
+        else{
+            wrapp.appendChild(text1)
+            wrapp.appendChild(text2)
+        }
+        wrapp.appendChild(text3)
+    }
+
+    function createCanva(){
         const canvas = document.createElement("canvas")
         canvas.classList.add("canv")
-        img.replaceWith(canvas)
+        return canvas
+    }
+
+    function createFormField(text, step, min){
+        const wrapp = document.createElement("div")
+        wrapp.classList.add("wrapp_chose")
+
+        const p = document.createElement("p")
+        p.innerText = text
+
+        const input = document.createElement("input")
+        input.classList.add("inp")
+        input.type = "number"
+        input.step = step
+        input.min = min
+        input.required = true
+
+        wrapp.appendChild(p)
+        wrapp.appendChild(input)
+
+        return wrapp
+    }
+
+    function replaceToCanvas(replaceElement){
+        const canvas = createCanva()
+        replaceElement.replaceWith(canvas)
        // wrapBtn.replaceChild(canvas, img)
     }
     
     function addButton(id){
-        const wrapp = app.querySelector(".wrapp_chose")
+        const wrapp = document.querySelector(".app .wrapp_chose")
         const wrapBtn = wrapp.querySelectorAll(".btn_wrapp_photo")
         //const wrapBtnEl = wrapp.getElementsByClassName("btn_wrapp_photo")
         productTitle[id].forEach((btn, i)=>{
@@ -172,7 +315,7 @@ function changeScene() {
 function changeStyles(toggle) {
     console.log( "toggle " ,toggle)
     if(toggle){
-        const wrapp = app.querySelector(".wrapp_chose")
+        const wrapp = document.querySelector(".app .wrapp_chose")
         const photoWrap = wrapp.querySelectorAll(".btn_wrapp_photo")
         wrapp.attributes.class.value = "wrapp_chose_v2";
         photoWrap.forEach(el => {
@@ -180,7 +323,7 @@ function changeStyles(toggle) {
         })
     }
     else{
-        const wrapp = app.querySelector(".wrapp_chose_v2")
+        const wrapp = document.querySelector(".app .wrapp_chose_v2")
         const photoWrap = wrapp.querySelectorAll(".btn_wrapp_title")
         wrapp.attributes.class.value = "wrapp_chose";
         photoWrap.forEach(el => {
@@ -195,15 +338,20 @@ function yourChose(answers) {
     console.log("chose", chose)
 }
 
-btnWrap.forEach(btn => {
-    btn.addEventListener('focus', (e) => {
-        withBtb = btn.id
+function activeButton(){
+    btnWrap = document.querySelectorAll('.btn_wrapp_photo')
+    btnWrap.forEach(btn => {
+        btn.addEventListener('focus', (e) => {
+            withBtb = btn.id
+        })
     })
-})
+}
+activeButton()
 
-btnSub.addEventListener('click', (e) => {
+function nextPage(e){
     e.stopPropagation();
     if (withBtb) {
+        console.log(withBtb)
         answers.push(withBtb);
         changeScene()
     }
@@ -211,7 +359,13 @@ btnSub.addEventListener('click', (e) => {
     console.log("counter", counterTitle)
 
     withBtb = null
-})
+}
+
+function addFunctionNextPageToButton(){
+    btnSub = document.querySelector('.btn')  
+    btnSub.addEventListener('click', nextPage)
+}
+addFunctionNextPageToButton()
 
 
 function getChoseProducts() {
