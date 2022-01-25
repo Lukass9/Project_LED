@@ -147,33 +147,72 @@ function changeScene() {
         case 5:
             const scene = document.querySelector(".app .wrapp_chose_v2")
             scene.remove()
+            let calc = [];
+            let calc1 = [];
+            let connL = 0;
+            const prevAnswer = answers[answers.length-2]
             const railInp = answers[answers.length-1]
-            const calc = calculation(railInp[0])
-            // console.log(calc)
 
-            
+            for(let i = 0; i < railInp.length-1; i++){
+                switch (prevAnswer) {
+                    case '0':
+                        calc1 = calculation(railInp[i])
+                        break;
+                    case '1':
+                        calc1[i] = calculation(railInp[i])
+                        connL = 1
+                        if(i>0){
+                            calc1[0].forEach((el, j)=>{
+                                calc1[j]+=el
+                            })
+                        }
+                        break;
+                    case '2':
+                        const calcBufor = calculation(railInp[i])
+                        calc1[i] = calcBufor.map(el=>el*2)
+                        if(i>0){
+                            calc1[0].forEach((el, j)=>{
+                                calc1[j]+=el
+                            })
+                        }
+                        connL = 3
+                        break;
+                    default:
+                        alert("coś poszło nie tak")
+                        break;
+                }
+                break;
+            }
+            calc1.forEach(e=> calc.push(e))
+            console.log(calc)
+
                 const txt = document.createElement('p')
                 const p1 = document.createElement('p')
                 const p2 = document.createElement('p')
                 const p3 = document.createElement('p')
                 const p4 = document.createElement('p')
+                const connector = document.createElement('p')
+                const connectorL = document.createElement('p')
                 const elWrapp = document.createElement('div')
+                elWrapp.className = "wrapp_chose_v2"
                 
                 txt.innerText = "Twój zestaw szynowy"
                 p1.innerText = "Listwa szynowa 1m: " + calc[0]   
                 p2.innerText = "Listwa szynowa 1.5m: " + calc[1]
                 p3.innerText = "Listwa szynowa 2m: " + calc[2]
                 p4.innerText = "Zostaje Ci reszty: " + calc[3]
+                connector.innerText = "łączników prostych: " + calc[4]
+                connectorL.innerText = "łączników kątowych: " + connL
+                
 
                 elWrapp.appendChild(txt)
                 elWrapp.appendChild(p1)
                 elWrapp.appendChild(p2)
                 elWrapp.appendChild(p3)
                 elWrapp.appendChild(p4)
+                elWrapp.appendChild(connector)
 
                 document.querySelector(".app .wrapp_title").after(elWrapp)
-
-            
 
             break;
         default:
@@ -197,7 +236,9 @@ function changeScene() {
         else if(rest>1.5) railStrip2m++;
         
         const piece = ((railStrip2m*2)+(railStrip1_5m*1.5)+railStrip1m - inp ).toFixed(2) 
-        const rail = [railStrip1m, railStrip1_5m, railStrip2m, piece]
+        const connector = railStrip2m + railStrip1_5m + railStrip1m - 1
+
+        const rail = [railStrip1m, railStrip1_5m, railStrip2m, piece, connector]
         return rail
     }
 
