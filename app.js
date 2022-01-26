@@ -148,7 +148,6 @@ function changeScene() {
             const scene = document.querySelector(".app .wrapp_chose_v2")
             scene.remove()
             let calc = [];
-            let calc1 = [];
             let connL = 0;
             const prevAnswer = answers[answers.length-2]
             const railInp = answers[answers.length-1]
@@ -156,24 +155,29 @@ function changeScene() {
             for(let i = 0; i < railInp.length-1; i++){
                 switch (prevAnswer) {
                     case '0':
-                        calc1 = calculation(railInp[i])
+                        calc = calculation(railInp[i])
                         break;
                     case '1':
-                        calc1[i] = calculation(railInp[i])
+                        calc[i] = calculation(railInp[i])
                         connL = 1
                         if(i>0){
-                            calc1[0].forEach((el, j)=>{
-                                calc1[j]+=el
+                            const buff =[]
+                            calc[0].forEach((el, j)=>{
+                                buff.push( el + (calc[1][j]) )
                             })
+                            calc = buff
                         }
                         break;
                     case '2':
+                        // calc[i] = calculation(railInp[i]*2)
                         const calcBufor = calculation(railInp[i])
-                        calc1[i] = calcBufor.map(el=>el*2)
+                        calc[i] = calcBufor.map(el=>el*2)
                         if(i>0){
-                            calc1[0].forEach((el, j)=>{
-                                calc1[j]+=el
+                            const buff =[]
+                            calc[0].forEach((el, j)=>{
+                                buff.push( el + (calc[1][j]) )
                             })
+                            calc = buff
                         }
                         connL = 3
                         break;
@@ -181,10 +185,9 @@ function changeScene() {
                         alert("coś poszło nie tak")
                         break;
                 }
-                break;
             }
-            calc1.forEach(e=> calc.push(e))
-            console.log(calc)
+            // calc1.forEach(e=> calc.push(e))
+            console.log(typeof calc, calc)
 
                 const txt = document.createElement('p')
                 const p1 = document.createElement('p')
@@ -200,7 +203,7 @@ function changeScene() {
                 p1.innerText = "Listwa szynowa 1m: " + calc[0]   
                 p2.innerText = "Listwa szynowa 1.5m: " + calc[1]
                 p3.innerText = "Listwa szynowa 2m: " + calc[2]
-                p4.innerText = "Zostaje Ci reszty: " + calc[3]
+                p4.innerText = "Zostaje Ci reszty: " + calc[3].toFixed(2) 
                 connector.innerText = "łączników prostych: " + calc[4]
                 connectorL.innerText = "łączników kątowych: " + connL
                 
@@ -238,7 +241,7 @@ function changeScene() {
         const piece = ((railStrip2m*2)+(railStrip1_5m*1.5)+railStrip1m - inp ).toFixed(2) 
         const connector = railStrip2m + railStrip1_5m + railStrip1m - 1
 
-        const rail = [railStrip1m, railStrip1_5m, railStrip2m, piece, connector]
+        const rail = [railStrip1m, railStrip1_5m, railStrip2m, +piece, connector]
         return rail
     }
 
