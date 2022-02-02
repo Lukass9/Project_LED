@@ -412,7 +412,7 @@ function app(){
     }
 
     function addFunctionNextPageToButton(){
-        btnSub = document.querySelector('.btn')  
+        btnSub = document.querySelector('.app .wrapp .wrapp_button .btn')  
         btnSub.addEventListener('click', nextPage)
     }
     addFunctionNextPageToButton()
@@ -428,26 +428,28 @@ function app(){
                 allProductFromCategoryId.push(el.id)
             })
         }
-        function findPhrase(arr, phrase, search, phrase2, search2) {
-            allProductFromCategoryId.forEach(el => {
+        function findPhrase(searchedLamps, phrase, search, phrase2, search2) {
+            allProductFromCategoryId.forEach(productID => {
                 frontAPI.getProduct(function (product) {
                 // console.log(product)
                     let counter = 0;
                     product.attributes.forEach((e) => {
                         if (e.name.includes(phrase) && e.value.includes(search)){// "Rodzaj"
                             counter++
+                            // console.log(e.name)
                         }
                         else if (e.name.includes(phrase2) && e.value.includes(search2)){
                             counter++
                         }
                         //console.log(counter)
                     })
-                    if(counter>=2) arr.push(product) //searchedProducts.push(el)
+                    if(counter>=2) searchedLamps.push(product) //searchedProducts.push(el)
                 }, {
-                    id: el
+                    id: productID
                 });
             })
             console.log(searchedProducts);
+            return searchedProducts
         }
         frontAPI.getProductsFromCategory(function (products) {
             allProductFromCategory = { ...products }
@@ -457,7 +459,7 @@ function app(){
             id: 62, // chose[0] //62
             urlParams: '?limit=50'
         })
-    } 
+    }
 
 
 
@@ -502,7 +504,7 @@ function buildStartStructApplication(){
                 btn_wrapp_photo1.classList.add("btn_wrapp_photo")
                 btn_wrapp_photo1.id = "0";
                     const photo_title1 = document.createElement("h3")
-                    photo_title1.classList.add("photo_title1")
+                    photo_title1.classList.add("photo_title")
                     photo_title1.innerText = "Oświetlenie 1-fazowe"
                     const img1 = document.createElement("img")
                     img1.classList.add("image")
@@ -512,9 +514,9 @@ function buildStartStructApplication(){
                 
                 const btn_wrapp_photo2 = document.createElement("button")
                 btn_wrapp_photo2.classList.add("btn_wrapp_photo")
-                btn_wrapp_photo1.id = "1";
+                btn_wrapp_photo2.id = "1";
                 const photo_title2 = document.createElement("h3")
-                photo_title2.classList.add("photo_title1")
+                photo_title2.classList.add("photo_title")
                 photo_title2.innerText = "Oświetlenie 3-fazowe"
                     const img2 = document.createElement("img")
                     img2.classList.add("image")

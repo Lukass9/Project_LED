@@ -11,31 +11,31 @@
     justify-content: center;
     text-align: center;
 }
-.wrapp{
+.app .wrapp{
     width: 90vw;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
-.wrapp_title{
+.app .wrapp .wrapp_title{
     height: 20%
 }
-.title,.step{
+.app .wrapp .wrapp_title .title,.step{
     margin: 10px;
 }
-.wrapp_chose{
+.app .wrapp .wrapp_chose{
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     height: 60%
 }
-.wrapp_chose_v2{
+.app .wrapp .wrapp_chose_v2{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 60%
 }
-.btn_wrapp_title{
+.app .wrapp .btn_wrapp_title{
     background-color: white;
     margin: 3%;
     width: 60%;
@@ -43,7 +43,7 @@
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border: none; 
 }
-.btn_wrapp_photo{
+.app .wrapp .btn_wrapp_photo{
     background-color: white;
     margin: 7%;
     width: 30vw;
@@ -51,34 +51,34 @@
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     border: none;  
 }
-.btn_wrapp_photo:focus, .btn_wrapp_title:focus{
+.app .wrapp .btn_wrapp_photo:focus, .app .wrapp .btn_wrapp_title:focus{
     border: 2px solid #FF7E00;
 }
 
-.image{
+.app .wrapp .btn_wrapp_photo .image{
     height: 50%; 
 }
 @media screen and (min-width: 640px) {
-    .wrapp{
+    .app .wrapp{
         width: 45vw;
         height: 35vw;
     }
-    .btn_wrapp_photo{
+    .app .wrapp .btn_wrapp_photo{
         width: 13vw;
         height: 15vw;
     }
    
-    .image{
+    .app .wrapp .btn_wrapp_photo .image{
         height: 55%; 
     }
 }
-.wrapp_button{
+.app .wrapp .wrapp_button{
     display:flex;
     justify-content: flex-end;
     align-items: flex-end;
     height: 20%;
 }
-.btn{
+.app .wrapp .wrapp_button .btn{
     background: #ff7e00;
     border: 0;
     color: #fff;
@@ -87,13 +87,14 @@
     letter-spacing: 3px;
     font-weight: bold;
 }
-.btn:hover{
+.app .wrapp .wrapp_button .btn:hover{
     cursor: pointer;
 }
-.inp{
+.app .wrapp .wrapp_chose_v2 .wrapp_chose .inp{
     margin: 2%;
     width: 15%;
 }
-.inp:invalid {
+.app .wrapp .wrapp_chose_v2 .wrapp_chose .inp:invalid {
     border: 1px solid red;
 }
+
