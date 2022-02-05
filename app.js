@@ -8,8 +8,8 @@ lampy 264
 szyny i łączniki 275
 */
 function app(){
+    const answerNumber = []
     const answers = []
-    const chose = []
     let withBtb;
     let counterTitle = 0;
     const questions = [[62, 264], ["GU10", "COB"], ["biała", "czarna"]]
@@ -86,7 +86,7 @@ function app(){
                 changeStyles(styleToggle)
                 styleToggle = !styleToggle 
                 changeButton()
-                yourChose(answers)
+// yourChoice(answerNumber)
                 break;
             case 3:
                 step.innerText = title[counterTitle] ? title[counterTitle] : ''
@@ -110,7 +110,7 @@ function app(){
                 break;
             case 4:
                 step.innerText = title[counterTitle] ? title[counterTitle] : ''
-                const answer = answers[answers.length-1]
+                const answer = answerNumber[answerNumber.length-1]
                 deleteScene()
                 const wrapp = document.querySelector(".app .wrapp_chose")
                 createCalculationScene(wrapp, answer)
@@ -150,16 +150,16 @@ function app(){
                 scene.remove()
                 let calc = [];
                 let connL = 0;
-                const prevAnswer = answers[answers.length-2]
-                const railInp = answers[answers.length-1]
+                const prevAnswer = answerNumber[answerNumber.length-2]
+                const railInp = answerNumber[answerNumber.length-1]
 
                 for(let i = 0; i < railInp.length-1; i++){
                     switch (prevAnswer) {
                         case '0':
-                            calc = calculation(railInp[i], +answers[0])
+                            calc = calculation(railInp[i], +answerNumber[0])
                             break;
                         case '1':
-                            calc[i] = calculation(railInp[i], +answers[0])
+                            calc[i] = calculation(railInp[i], +answerNumber[0])
                             connL = 1
                             if(i>0){
                                 const buff =[]
@@ -171,7 +171,7 @@ function app(){
                             break;
                         case '2':
                             // calc[i] = calculation(railInp[i]*2)
-                            const calcBufor = calculation(railInp[i], +answers[0])
+                            const calcBufor = calculation(railInp[i], +answerNumber[0])
                             calc[i] = calcBufor.map(el=>el*2)
                             if(i>0){
                                 const buff =[]
@@ -354,12 +354,27 @@ function app(){
                 const img = el.querySelector("img")
                 if( productTitle.length -1 >= counterTitle){
                     title.innerText = productTitle[counterTitle][counterProductTitle]
-                    if(img) img.src = ""
+                    if(img) ChangeIMG(img)
                     counterProductTitle++
                 }
             })
         }
         counterTitle++
+    }
+
+    function ChangeIMG(img){
+        yourChoice(answerNumber)
+        const urlIMG = 'https://onled.pl/userdata/public/gfx/'
+        const products = getChoseProducts(...answers)
+        products.forEach(e=>{
+            console.log("ele",e)
+        })
+        console.log("Badamy tutaj ->",products.at(0))
+        console.log("log Badamy tutaj ->",products )
+        console.dir("dir Badamy tutaj ->",products )
+        console.log("Badamy tutaj ->", products[0])
+        console.log("Badamy tutaj ->  length", products.length )
+        // img.src = urlIMG + products[0].main_image_filename
     }
 
     function changeStyles(toggle) {
@@ -381,11 +396,18 @@ function app(){
             })
         }
     }
-    function yourChose(answers) {
-        answers.forEach((el, i) => {
-            chose.push(questions[i][el])
-        })
-        console.log("chose", chose)
+    function yourChoice(answerNumber) {
+        answers.length = 0;
+
+        if(answerNumber.length>0){
+            answerNumber.forEach((el, i) => {
+                answers.push(questions[i][el])
+            })
+        }
+        else answers.push(questions[0][answerNumber])
+
+        console.log("answers", answers)
+        console.log("...answers", ...answers)
     }
 
     function activeButton(){
@@ -402,10 +424,11 @@ function app(){
         e.stopPropagation();
         if (withBtb) {
             console.log(withBtb)
-            answers.push(withBtb);
+            answerNumber.push(withBtb);
             changeScene()
         }
-        console.log("answers", answers.length)
+        console.log("answers.length", answerNumber.length)
+        console.log("answers", answerNumber)
         console.log("counter", counterTitle)
 
         withBtb = null
@@ -418,7 +441,7 @@ function app(){
     addFunctionNextPageToButton()
 
 
-    function getChoseProducts() {
+    function getChoseProducts(whichPhase = 62, kindOfLight = "COB", whichColor = "czarny" ) {
         let allProductFromCategory = {}
         const allProductFromCategoryId = [];
         const searchedProducts = [];
@@ -448,19 +471,23 @@ function app(){
                     id: productID
                 });
             })
-            console.log(searchedProducts);
-            return searchedProducts
+            // console.log("console.log", searchedLamps);
+            // return searchedProducts
         }
         frontAPI.getProductsFromCategory(function (products) {
             allProductFromCategory = { ...products }
             assignId()
-            findPhrase(searchedProducts, "Rodzaj", "COB" ,"Kolor", "biały")
+            findPhrase(searchedProducts, "Rodzaj", kindOfLight ,"Kolor", whichColor)
+            
         }, {
-            id: 62, // chose[0] //62
+            id: whichPhase, // chose[0] //62
             urlParams: '?limit=50'
         })
+        return searchedProducts
     }
+    
 
+    // console.log(products)
 
 
 
