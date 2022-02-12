@@ -12,7 +12,7 @@ function app(){
     const answers = []
     let withBtb;
     let counterTitle = 0;
-    const questions = [[62, 264], ["GU10", "COB"], ["biała", "czarna"]]
+    const questions = [[62, 264], ["GU10", "COB"], ["biały", "czarny"]]
     let styleToggle = true;
 
     class AllShapesCanvas{
@@ -347,14 +347,14 @@ function app(){
         }
         function changeButton(){
             let counterProductTitle = 0
-            photoWrap.forEach(el => {
+            photoWrap.forEach((el,i) => {
                 //console.dir(el.attributes.class.value)
                 //console.log(productTitle[productTitle.length-1].length)
                 const title = el.querySelector("h3")
                 const img = el.querySelector("img")
                 if( productTitle.length -1 >= counterTitle){
                     title.innerText = productTitle[counterTitle][counterProductTitle]
-                    if(img) ChangeIMG(img)
+                    if(img) ChangeIMG(img, i)
                     counterProductTitle++
                 }
             })
@@ -362,19 +362,15 @@ function app(){
         counterTitle++
     }
 
-    function ChangeIMG(img){
+    function ChangeIMG(img, numberOfPhoto){
         yourChoice(answerNumber)
         const urlIMG = 'https://onled.pl/userdata/public/gfx/'
-        const products = getChoseProducts(...answers)
-        products.forEach(e=>{
-            console.log("ele",e)
-        })
-        console.log("Badamy tutaj ->",products.at(0))
-        console.log("log Badamy tutaj ->",products )
-        console.dir("dir Badamy tutaj ->",products )
-        console.log("Badamy tutaj ->", products[0])
-        console.log("Badamy tutaj ->  length", products.length )
-        // img.src = urlIMG + products[0].main_image_filename
+        if(answers.length <= 3){
+            const products = getChoseProducts(...answers, questions[answers.length][numberOfPhoto])
+            console.log("products", products)
+            img.src = urlIMG + products[0].main_image_filename
+        }
+        else img.src = ''
     }
 
     function changeStyles(toggle) {
@@ -440,55 +436,61 @@ function app(){
     }
     addFunctionNextPageToButton()
 
-
     function getChoseProducts(whichPhase = 62, kindOfLight = "COB", whichColor = "czarny" ) {
         let allProductFromCategory = {}
-        const allProductFromCategoryId = [];
-        const searchedProducts = [];
-        
-        function assignId(){
-            allProductFromCategory.list.forEach(el => {
-                allProductFromCategoryId.push(el.id)
-            })
-        }
-        function findPhrase(searchedLamps, phrase, search, phrase2, search2) {
-            allProductFromCategoryId.forEach(productID => {
-                frontAPI.getProduct(function (product) {
-                // console.log(product)
-                    let counter = 0;
-                    product.attributes.forEach((e) => {
-                        if (e.name.includes(phrase) && e.value.includes(search)){// "Rodzaj"
-                            counter++
-                            // console.log(e.name)
-                        }
-                        else if (e.name.includes(phrase2) && e.value.includes(search2)){
-                            counter++
-                        }
-                        //console.log(counter)
-                    })
-                    if(counter>=2) searchedLamps.push(product) //searchedProducts.push(el)
-                }, {
-                    id: productID
-                });
-            })
-            // console.log("console.log", searchedLamps);
-            // return searchedProducts
-        }
-        frontAPI.getProductsFromCategory(function (products) {
-            allProductFromCategory = { ...products }
-            assignId()
-            findPhrase(searchedProducts, "Rodzaj", kindOfLight ,"Kolor", whichColor)
-            
-        }, {
-            id: whichPhase, // chose[0] //62
+        const searchedProducts = []
+        const products = frontAPI.getProductsFromCategory({
+            id: whichPhase, // chose[0] //62 , 264
             urlParams: '?limit=50'
         })
+            allProductFromCategory = { ...products }
+            const allProductFromCategoryId = assignId(allProductFromCategory)
+            findPhrase(allProductFromCategoryId, searchedProducts, "Rodzaj", kindOfLight ,"Kolor", whichColor)
         return searchedProducts
     }
-    
 
-    // console.log(products)
+    function assignId(allProductFromCategory){
+        const allProductFromCategoryId = []
+        allProductFromCategory.list.forEach(el => {
+            allProductFromCategoryId.push(el.id)
+        })
+        return allProductFromCategoryId
+    }
 
+    function findPhrase(allProductFromCategoryId, searchedLamps, phrase, search, phrase2, search2,) {
+        allProductFromCategoryId.forEach(productID => {
+            const product = frontAPI.getProduct({id: productID})
+            // console.log(product)
+                let counter = 0;
+                product.attributes.forEach((e) => {
+                    if (e.name.includes(phrase) && e.value.includes(search)){// "Rodzaj"
+                        counter++
+                        // console.log(e.name)
+                    }
+                    else if (e.name.includes(phrase2) && e.value.includes(search2)){
+                        counter++
+                    }
+                    //console.log(counter)
+                })
+                if(counter>=2) searchedLamps.push(product) //searchedProducts.push(el)
+           
+        })
+        return searchedLamps
+    }
+    function findPhrase2(searchedLamps, phrase, search, phrase2, search2){
+        let counter = 0;
+                product.attributes.forEach((e) => {
+                    if (e.name.includes(phrase) && e.value.includes(search)){// "Rodzaj"
+                        counter++
+                        // console.log(e.name)
+                    }
+                    else if (e.name.includes(phrase2) && e.value.includes(search2)){
+                        counter++
+                    }
+                    //console.log(counter)
+                })
+                if(counter>=2) searchedLamps.push(product) //searchedProducts.push(el)
+    }
 
 
     // let url = 'https://onled.pl//webapi/rest/auth';
@@ -566,6 +568,161 @@ function buildStartStructApplication(){
     main.appendChild(wrapp)
 
     document.querySelector("body").appendChild(main)
-}
+    }   
+const lamps = [
+        {
+            id: "62",
+            products: [
+                {
+                    name: "Lampa szynowa LED PREMIUM 23W 3000K CIEPŁA BIAŁA JEDNOFAZOWA",
+                    main_image_filename: "1191.jpg",
+                    attributes:
+                    [
+                        {
+                            name: "Kolor",
+                            value: "biały"
+                        },
+    
+                        {
+                            name: "Rodzaj",
+                            value: "COB"
+                        }
+                    ],
+    
+                },
+    
+                {
+                    name: "Reflektor szynowy na żarówkę GU10 BIAŁY JEDNOFAZOWY",
+                    main_image_filename: "1322.jpg",
+                    attributes:
+                    [
+                        {
+                            name: "Kolor",
+                            value: "biały"
+                        },
+                        
+                        {
+                            name: "Rodzaj",
+                            value: "GU10"
+                        }
+                    ],
+    
+                },
+    
+                {
+                    name: "Lampa szynowa LED PREMIUM 23W 3000K CIEPŁA CZARNA JEDNOFAZOWA",
+                    main_image_filename: "1175.jpg",
+                    attributes:
+                    [
+                        {
+                            name: "Kolor",
+                            value: "czarny"
+                        },
+    
+                        {
+                            name: "Rodzaj",
+                            value: "COB"
+                        }
+                    ],
+    
+                },
+    
+                {
+                    name: "Reflektor szynowy na żarówkę GU10 CZARNY JEDNOFAZOWY",
+                    main_image_filename: "1883.jpg",
+                    attributes:
+                    [
+                        {
+                            name: "Kolor",
+                            value: "czarny"
+                        },
+                        
+                        {
+                            name: "Rodzaj",
+                            value: "GU10"
+                        }
+                    ],
+    
+                },
+            ]
+        },
+    
+        {
+            id: "264",
+            products: [
+                {
+                    name: "Lampa szynowa LED 23W 4000K BIAŁA TRÓJFAZOWA",
+                    main_image_filename: "3051.jpg",
+                    attributes:
+                    [
+                        {
+                            name: "Kolor",
+                            value: "biały"
+                        },
+    
+                        {
+                            name: "Rodzaj",
+                            value: "COB"
+                        }
+                    ],
+    
+                },
+    
+                {
+                    name: "Reflektor szynowy na żarówkę GU10 LONG BIAŁY TRÓJFAZOWY",
+                    main_image_filename: "1919.jpg",
+                    attributes:
+                    [
+                        {
+                            name: "Kolor",
+                            value: "biały"
+                        },
+                        
+                        {
+                            name: "Rodzaj",
+                            value: "GU10"
+                        }
+                    ],
+    
+                },
+    
+                {
+                    name: "Lampa szynowa LED 23W 4000K CZARNA TRÓJFAZOWA",
+                    main_image_filename: "3056.jpg",
+                    attributes:
+                    [
+                        {
+                            name: "Kolor",
+                            value: "czarny"
+                        },
+    
+                        {
+                            name: "Rodzaj",
+                            value: "COB"
+                        }
+                    ],
+    
+                },
+    
+                {
+                    name: "Reflektor szynowy na żarówkę GU10 LONG CZARNY TRÓJFAZOWY",
+                    main_image_filename: "1921.jpg",
+                    attributes:
+                    [
+                        {
+                            name: "Kolor",
+                            value: "czarny"
+                        },
+                        
+                        {
+                            name: "Rodzaj",
+                            value: "GU10"
+                        }
+                    ],
+    
+                },
+            ]
+        },
+    ]
 buildStartStructApplication()
 app()
