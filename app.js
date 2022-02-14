@@ -365,9 +365,9 @@ function app(){
     function ChangeIMG(img, numberOfPhoto){
         yourChoice(answerNumber)
         const urlIMG = 'https://onled.pl/userdata/public/gfx/'
-        if(answers.length <= 3){
-            const products = getChoseProducts(...answers, questions[answers.length][numberOfPhoto])
-            console.log("products", products)
+        if(answers.length <= 2){
+            //const products = getChoseProducts(...answers, questions[answers.length][numberOfPhoto])
+            const products = findPhraseLocal(lamps, ...answers, questions[answers.length][numberOfPhoto])
             img.src = urlIMG + products[0].main_image_filename
         }
         else img.src = ''
@@ -445,7 +445,7 @@ function app(){
         })
             allProductFromCategory = { ...products }
             const allProductFromCategoryId = assignId(allProductFromCategory)
-            findPhrase(allProductFromCategoryId, searchedProducts, "Rodzaj", kindOfLight ,"Kolor", whichColor)
+            findPhraseOnTheServer(allProductFromCategoryId, searchedProducts, "Rodzaj", kindOfLight ,"Kolor", whichColor)
         return searchedProducts
     }
 
@@ -457,7 +457,29 @@ function app(){
         return allProductFromCategoryId
     }
 
-    function findPhrase(allProductFromCategoryId, searchedLamps, phrase, search, phrase2, search2,) {
+    function findPhraseLocal(products, id, search = "COB" , search2 = "czarny"){
+        let phase
+        if(id===62) phase = 0
+        else phase = 1 
+        const searchedLamps = [];
+        products[phase].products.forEach(product=>{
+            let counter = 0;
+            product.attributes.forEach((e) => {
+                if (e.name.includes("Rodzaj") && e.value.includes(search)){// "Rodzaj"
+                    counter++
+                     //console.log("e.name", e.name)
+                }
+                else if (e.name.includes("Kolor") && e.value.includes(search2)){
+                    counter++
+                }
+                //console.log(counter)
+            })
+            if(counter>=2) searchedLamps.push(product) //searchedProducts.push(el)
+        })  
+        return searchedLamps
+    }
+
+    function findPhraseOnTheServer(allProductFromCategoryId, searchedLamps, phrase, search, phrase2, search2,) {
         allProductFromCategoryId.forEach(productID => {
             const product = frontAPI.getProduct({id: productID})
             // console.log(product)
@@ -477,21 +499,6 @@ function app(){
         })
         return searchedLamps
     }
-    function findPhrase2(searchedLamps, phrase, search, phrase2, search2){
-        let counter = 0;
-                product.attributes.forEach((e) => {
-                    if (e.name.includes(phrase) && e.value.includes(search)){// "Rodzaj"
-                        counter++
-                        // console.log(e.name)
-                    }
-                    else if (e.name.includes(phrase2) && e.value.includes(search2)){
-                        counter++
-                    }
-                    //console.log(counter)
-                })
-                if(counter>=2) searchedLamps.push(product) //searchedProducts.push(el)
-    }
-
 
     // let url = 'https://onled.pl//webapi/rest/auth';
     // // let username = 'lukass9';
