@@ -66,7 +66,7 @@ function app(){
     }
 
     function changeScene() {
-        const title = ["Wybierz źródło światła", "Wybierz  kolor", "", "Schemat ułożenia", "", "Podsumowanie"]
+        const title = ["Wybierz źródło światła", "Wybierz  kolor", "", "Schemat ułożenia", "", "Wybierz Lampę", "Podsumowanie"]
         const productTitle = [["Reflektor na żarówkę", "Zintegrowane źródło światła"], ["Biała", "Czarna"], ["Kreator automatyczny", "Kreator manualny"], ["Linia prosta", "Litera L", "Czworokąt"]]
         const step = document.querySelector(".app .step");
         let photoWrap = document.querySelectorAll(".app .btn_wrapp_photo")
@@ -148,6 +148,20 @@ function app(){
                 step.innerText = title[counterTitle] ? title[counterTitle] : ''
                 const scene = document.querySelector(".app .wrapp_chose_v2")
                 scene.remove()
+            
+                const lampsScene = buildChoseStructApp()
+                const wrapp_chose = document.createElement("div")
+                wrapp_chose.classList.add("wrapp_chose")
+                wrapp_chose.appendChild(lampsScene)
+                document.querySelector(".app .wrapp_title").after(wrapp_chose)
+
+                //loadLamp()
+
+                break;
+            case 6:
+                step.innerText = title[counterTitle] ? title[counterTitle] : ''
+                scene = document.querySelector(".app .wrapp_chose_v2")
+                scene.remove()
                 let calc = [];
                 let connL = 0;
                 const prevAnswer = answerNumber[answerNumber.length-2]
@@ -217,6 +231,8 @@ function app(){
 
                     document.querySelector(".app .wrapp_title").after(elWrapp)
 
+                    const lampki = getChoseProducts(...answers)
+                    console.log(lampki)
                 break;
             default:
                 // changeStyles(styleToggle)
@@ -515,7 +531,47 @@ function app(){
     //     .then(response => response.json())
     //     .then(json => console.log(json))
 }
+function loadLamp(lamp){
+    const lampImg = document.querySelector(".app .lamp .lampImg")
+    lampImg.src = lamp.main_image_filename
+    const title = document.querySelector(".app .lamp .justLeft p")
+    title.innerText = lamp.name
+    const avaiblity = document.querySelector(".app .lamp .textTogether .avaiblity")
+    avaiblity.innerText = lamp.attributes.avaiblity // trzeba zobaczyć jak będzie prawidłowo
+    const price = document.querySelector(".app .lamp .price")
+    price = lamp.price.brutto // trzeba zobaczyć jak będzie prawidłowo
+}
 
+
+function buildChoseStructApp(){
+    const wrapp_lamps = document.createElement("div")
+    wrapp_lamps.classList.add("wrapp_lamps")
+        const lamp = document.createElement("div")
+        lamp.classList.add("lamp")
+            const lampImg = document.createElement("img")
+            lampImg.classList.add("lampImg")
+            const justLeft = document.createElement("div")
+            justLeft.classList.add("justLeft")
+                const p = document.createElement("p")
+                const textTogether = document.createElement("div")
+                textTogether.classList.add("textTogether")
+                    const p1 = document.createElement("p")
+                    p1.innerText = "Dostępność: "
+                    const avaiblity = document.createElement("p")
+                    avaiblity.classList.add("avaiblity")
+                textTogether.appendChild(p1)
+                textTogether.appendChild(avaiblity)
+                const price = document.createElement("p")
+                price.classList.add("avaiblity")
+            justLeft.appendChild(p)
+            justLeft.appendChild(textTogether)
+            justLeft.appendChild(price)
+        lamp.appendChild(lampImg)
+        lamp.appendChild(justLeft)
+    wrapp_lamps.appendChild(lamp) 
+
+    return wrapp_lamps
+}   
 
 function buildStartStructApplication(){
     const main = document.createElement("main")
