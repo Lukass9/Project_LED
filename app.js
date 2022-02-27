@@ -13,6 +13,9 @@ function app(){
     let counterTitle = 0;
     const questions = [[62, 264], ["GU10", "COB"], ["biały", "czarny"]]
     let styleToggle = true;
+    
+    buildStartStructApplication()
+    changeScene()
 
     class AllShapesCanvas{
         static setSizeCanva(element){
@@ -22,29 +25,42 @@ function app(){
         element.height = btnWrap[0].offsetWidth * 0.8;
         }
         static paintLine(ctx, canv){
-        ctx.beginPath();
-        ctx.lineTo(canv.width/4, canv.height/2);
-        ctx.lineTo(canv.width/1.30, canv.height/2);
-        ctx.stroke();
+            ctx.beginPath();
+            ctx.lineTo(canv.width/4, canv.height/2);
+            ctx.lineTo(canv.width/1.30, canv.height/2);
+            ctx.stroke();
         }
         static paintL(ctx, canv){
-        ctx.beginPath();
-        ctx.lineTo(canv.width/4, canv.height/4);
-        ctx.lineTo(canv.width/4, canv.height/1.25);
-        ctx.lineTo(canv.width/1.25, canv.height/1.25);
-        ctx.stroke();
+            ctx.beginPath();
+            ctx.lineTo(canv.width/4, canv.height/4);
+            ctx.lineTo(canv.width/4, canv.height/1.25);
+            ctx.lineTo(canv.width/1.25, canv.height/1.25);
+            ctx.stroke();
         }
+        static paintU(ctx, canv){
+            ctx.beginPath();
+            ctx.lineTo(canv.width/4, canv.height/4);
+            ctx.lineTo(canv.width/4, canv.height/1.25);
+            ctx.lineTo(canv.width/1.25, canv.height/1.25);
+            ctx.lineTo(canv.width/1.25, canv.height/4);
+            ctx.stroke();
+          }
         static paintSquare(ctx, canv){
-        ctx.beginPath();
-        ctx.rect(canv.width/4, canv.height/4, canv.width/2, canv.height/2);
-        ctx.stroke();
+            ctx.beginPath();
+            ctx.rect(canv.width/4, canv.height/4, canv.width/2, canv.height/2);
+            ctx.stroke();
         }
         static paintMark(ctx,canv){
             ctx.font = "italic bold 18px Arial";
             ctx.fillText("A", canv.width/5, canv.height/1.8);
             ctx.fillText("B", canv.width/2, canv.height/1.09);
         }
-        
+
+        static paintMarkU(ctx,canv){
+            this.paintMark(ctx,canv)
+            ctx.fillText("C", canv.width/1.24, canv.height/1.8);
+          }
+          
         static drawAllShapes(){
             const app = document.querySelector(".app")
             const btnWrap = app.querySelectorAll('.btn_wrapp_photo')
@@ -53,60 +69,78 @@ function app(){
                 const ctx = canv.getContext("2d");
                 AllShapesCanvas.setSizeCanva(canv)
                 switch(i){
-                case 0: AllShapesCanvas.paintLine(ctx, canv)
-                    break;
-                case 1: AllShapesCanvas.paintL(ctx, canv)
-                    break;
-                case 2: AllShapesCanvas.paintSquare(ctx, canv)
-                    break;
+                    case 0: AllShapesCanvas.paintLine(ctx, canv)
+                        break;
+                    case 1: AllShapesCanvas.paintL(ctx, canv)
+                        break;
+                    case 2: AllShapesCanvas.paintU(ctx, canv)
+                        break;
+                    case 3: AllShapesCanvas.paintSquare(ctx, canv)
+                        break;
                 }
             })
         }
     }
 
     function changeScene() {
-        const title = ["Wybierz źródło światła", "Wybierz  kolor", "", "Schemat ułożenia", "", "Wybierz Lampę", "Podsumowanie"]
-        const productTitle = [["Reflektor na żarówkę", "Zintegrowane źródło światła"], ["Biała", "Czarna"], ["Kreator automatyczny", "Kreator manualny"], ["Linia prosta", "Litera L", "Czworokąt"]]
+        const title = ["Wybierz rodzaj zasilania", "Wybierz źródło światła", "Wybierz  kolor", "", "Schemat ułożenia", "", "Wybierz Lampę", "Podsumowanie"]
+        const productTitle = [["Oświetlenie 1-fazowe","Oświetlenie 3-fazowe"],["Reflektor na żarówkę", "Zintegrowane źródło światła"], ["Biała", "Czarna"], ["Kreator automatyczny", "Kreator manualny"], ["Linia prosta", "Litera L", "Litera U", "Czworokąt"]]
         const step = document.querySelector(".app .step");
         let photoWrap = document.querySelectorAll(".app .btn_wrapp_photo")
         let input = []
         
         switch (counterTitle) {
             case 0:
+                resetStruct()
+                step.innerText = title[counterTitle] ? title[counterTitle] : ''
+                addInformation()
+                addFirstButton(productTitle[0])
+                break;
+            case 1:
+                resetStruct()
                 step.innerText = title[counterTitle] ? title[counterTitle] : ''
                 addInformation()
                 changeButton()
                 break;
-            case 1:
-                step.innerText = title[counterTitle] ? title[counterTitle] : ''
-                changeButton()
-                break;
             case 2:
+                resetStruct()
                 step.innerText = title[counterTitle] ? title[counterTitle] : ''
-                changeStyles(styleToggle)
-                styleToggle = !styleToggle 
                 changeButton()
                 break;
             case 3:
+                resetStruct()
                 step.innerText = title[counterTitle] ? title[counterTitle] : ''
                 changeStyles(styleToggle)
                 styleToggle = !styleToggle 
-
-                const wrapBtn = document.querySelectorAll(".app .btn_wrapp_photo")
-                const img = wrapBtn[0].querySelector(".image") 
-                replaceToCanvas(img)
-
-                addButton(counterTitle)
-                photoWrap = document.querySelectorAll(".app .btn_wrapp_photo")
                 changeButton()
-                AllShapesCanvas.drawAllShapes()
-                addEventListener("resize", (e)=>{
-                    AllShapesCanvas.drawAllShapes()
-                })
-                
-                activeButton()
                 break;
             case 4:
+                changeStyles(styleToggle)
+                styleToggle = !styleToggle 
+
+                clearScene()
+                insertStruct( buildCanvaStructur() )
+                activeButton()
+                addFunctionNextPageToButton()
+                step.innerText = title[counterTitle] ? title[counterTitle] : ''
+                // addCanvas()
+                // resetStruct()
+                
+                // const wrapBtn = document.querySelectorAll(".app .btn_wrapp_photo")
+                // const img = wrapBtn[0].querySelector(".image") 
+                // replaceToCanvas(img)
+
+                // addButton(counterTitle)
+                // photoWrap = document.querySelectorAll(".app .btn_wrapp_photo")
+                changeButton()
+                AllShapesCanvas.drawAllShapes()
+                // addEventListener("resize", (e)=>{
+                //     AllShapesCanvas.drawAllShapes()
+                // })
+                
+                // activeButton()
+                break;
+            case 5:
                 step.innerText = title[counterTitle] ? title[counterTitle] : ''
                 const answer = answerNumber[answerNumber.length-1]
                 deleteScene()
@@ -134,6 +168,11 @@ function app(){
                         AllShapesCanvas.paintMark(ctx,canv)
                         break;
                     case '2':
+                        AllShapesCanvas.paintU(ctx, canv)
+                        AllShapesCanvas.paintMark(ctx,canv)
+                        AllShapesCanvas.paintMarkU(ctx,canv)
+                        break;
+                    case '3':
                         AllShapesCanvas.paintSquare(ctx, canv)
                         AllShapesCanvas.paintMark(ctx,canv)
                         break;
@@ -142,7 +181,7 @@ function app(){
                         break;
                 }
                 break;
-            case 5:
+            case 6:
                 step.innerText = title[counterTitle] ? title[counterTitle] : ''
                 const scene = document.querySelector(".app .wrapp_chose_v2")
                 scene.remove()
@@ -161,7 +200,7 @@ function app(){
                 //loadLamp(lampki2[0])
 
                 break;
-            case 6:
+            case 7:
                 step.innerText = title[counterTitle] ? title[counterTitle] : ''
                 const scene2 = document.querySelector(".app .wrapp_chose")
                 scene2.remove()
@@ -405,14 +444,25 @@ function app(){
             })
             
         }
-        function changeButton(){
-            let counterProductTitle = 0
-            photoWrap.forEach((el,i) => {
-                //console.dir(el.attributes.class.value)
-                //console.log(productTitle[productTitle.length-1].length)
+
+        function addFirstButton(lampsTitle){
+            const photoWrapp = document.querySelectorAll(".app .btn_wrapp_photo")
+            const lampsPhotos = ["https://onled.pl/environment/cache/images/400_400_productGfx_3827/2872.png","https://onled.pl/environment/cache/images/400_400_productGfx_3067/5x-Lampa-3-fazowa-25W---szyna-allegro-zestaw-czarna.jpg"]
+            photoWrapp.forEach((el,i) => {
                 const title = el.querySelector("h3")
                 const img = el.querySelector("img")
-                if( productTitle.length -1 >= counterTitle){
+                title.innerText = lampsTitle[i]
+                img.src = lampsPhotos[i]
+            })
+        }
+        function changeButton(){
+            let counterProductTitle = 0
+            const photoWrapp = document.querySelectorAll(".app .btn_wrapp_photo").length ?
+                document.querySelectorAll(".app .btn_wrapp_photo") : document.querySelectorAll(".app .btn_wrapp_title")
+            photoWrapp.forEach((el,i) => {
+                const title = el.querySelector("h3")
+                const img = el.querySelector("img")
+                if(productTitle.length -1 >= counterTitle){
                     title.innerText = productTitle[counterTitle][counterProductTitle]
                     if(img) ChangeIMG(img, i)
                     counterProductTitle++
@@ -421,18 +471,94 @@ function app(){
         }
         counterTitle++
     }
+    function buildCanvaStructur(){
+        const wrapp_chose_v2 = document.createElement("div")
+        wrapp_chose_v2.classList.add("wrapp_chose_v2")
+            const wrapp_chose1 = buildWrapp_choseForCanva(["0","1"])
+            const wrapp_chose2 = buildWrapp_choseForCanva(["2","3"])
+        wrapp_chose_v2.appendChild(wrapp_chose1)
+        wrapp_chose_v2.appendChild(wrapp_chose2)
+        return wrapp_chose_v2
+    }
+    function clearScene(){
+        document.querySelector(".app .wrapp_chose").remove()
+    }
+    function buildWrapp_choseForCanva(id){
+        const wrapp_chose = document.createElement("div")
+                  wrapp_chose.classList.add("wrapp_chose")
+                      const btn_wrapp_photo1 = document.createElement("button")
+                      btn_wrapp_photo1.classList.add("btn_wrapp_photo")
+                      btn_wrapp_photo1.id = id[0];
+                          const photo_title1 = document.createElement("h3")
+                          photo_title1.classList.add("photo_title")
+                          const canv1 = document.createElement("canvas")
+                          canv1.classList.add("canv")
+                      btn_wrapp_photo1.appendChild(photo_title1)
+                      btn_wrapp_photo1.appendChild(canv1)
+                      
+                      const btn_wrapp_photo2 = document.createElement("button")
+                      btn_wrapp_photo2.classList.add("btn_wrapp_photo")
+                      btn_wrapp_photo2.id = id[1];
+                      const photo_title2 = document.createElement("h3")
+                      photo_title2.classList.add("photo_title")
+                          const canv2 = document.createElement("canvas")
+                          canv2.classList.add("canv")
+                      btn_wrapp_photo2.appendChild(photo_title2)
+                      btn_wrapp_photo2.appendChild(canv2)
+                  wrapp_chose.appendChild(btn_wrapp_photo1)
+                  wrapp_chose.appendChild(btn_wrapp_photo2)
+        return wrapp_chose
+    }
 
+    function buildBasicStruct(){
+        const wrapp_chose = document.createElement("div")
+                  wrapp_chose.classList.add("wrapp_chose")
+                      const btn_wrapp_photo1 = document.createElement("button")
+                      btn_wrapp_photo1.classList.add("btn_wrapp_photo")
+                      btn_wrapp_photo1.id = "0";
+                          const photo_title1 = document.createElement("h3")
+                          photo_title1.classList.add("photo_title")
+                          // photo_title1.innerText = "Oświetlenie 1-fazowe"
+                          const img1 = document.createElement("img")
+                          img1.classList.add("image")
+                          // img1.src = "https://onled.pl/environment/cache/images/400_400_productGfx_3827/2872.png"
+                      btn_wrapp_photo1.appendChild(photo_title1)
+                      btn_wrapp_photo1.appendChild(img1)
+                      
+                      const btn_wrapp_photo2 = document.createElement("button")
+                      btn_wrapp_photo2.classList.add("btn_wrapp_photo")
+                      btn_wrapp_photo2.id = "1";
+                      const photo_title2 = document.createElement("h3")
+                      photo_title2.classList.add("photo_title")
+                      // photo_title2.innerText = "Oświetlenie 3-fazowe"
+                          const img2 = document.createElement("img")
+                          img2.classList.add("image")
+                          // img2.src = "https://onled.pl/environment/cache/images/400_400_productGfx_3067/5x-Lampa-3-fazowa-25W---szyna-allegro-zestaw-czarna.jpg"
+                      btn_wrapp_photo2.appendChild(photo_title2)
+                      btn_wrapp_photo2.appendChild(img2)
+                  wrapp_chose.appendChild(btn_wrapp_photo1)
+                  wrapp_chose.appendChild(btn_wrapp_photo2)
+        return wrapp_chose
+    }
+    function insertStruct(struct){
+        const btn = document.querySelector(".app .wrapp .wrapp_button")
+        document.querySelector(".app .wrapp").insertBefore(struct, btn)
+    }
+    function resetStruct(){
+        clearScene()
+        insertStruct( buildBasicStruct() )
+        activeButton()
+        addFunctionNextPageToButton()
+    }
     function ChangeIMG(img, numberOfPhoto){
         yourChoice(answerNumber)
         const urlIMG = 'https://onled.pl/userdata/public/gfx/'
         if(answers.length <= 2){
-            //const products = getChoseProducts(...answers, questions[answers.length][numberOfPhoto])
             const products = findPhraseLocal(lamps, ...answers, questions[answers.length][numberOfPhoto])
             img.src = urlIMG + products[0].main_image_filename
         }
         else img.src = ''
     }
-
     function changeStyles(toggle) {
         console.log( "toggle " ,toggle)
         if(toggle){
@@ -465,7 +591,6 @@ function app(){
         console.log("answers", answers)
         console.log("...answers", ...answers)
     }
-
     function activeButton(){
         btnWrap = document.querySelectorAll('.btn_wrapp_photo').length ? document.querySelectorAll('.btn_wrapp_photo') : document.querySelectorAll('.lamp') 
         console.log("activeButton", btnWrap)
@@ -475,8 +600,6 @@ function app(){
             })
         })
     }
-    activeButton()
-
     function nextPage(e){
         e.stopPropagation();
         if (withBtb) {
@@ -490,14 +613,10 @@ function app(){
 
         withBtb = null
     }
-
     function addFunctionNextPageToButton(){
         btnSub = document.querySelector('.app .wrapp .wrapp_button .btn')  
         btnSub.addEventListener('click', nextPage)
     }
-
-    addFunctionNextPageToButton()
-
     function getChoseProducts(whichPhase = 62, kindOfLight = "COB", whichColor = "czarny" ) {
         let allProductFromCategory = {}
         const searchedProducts = []
@@ -510,7 +629,6 @@ function app(){
             findPhraseOnTheServer(allProductFromCategoryId, searchedProducts, "Rodzaj", kindOfLight ,"Kolor", whichColor)
         return searchedProducts
     }
-
     function assignId(allProductFromCategory){
         const allProductFromCategoryId = []
         allProductFromCategory.list.forEach(el => {
@@ -518,7 +636,6 @@ function app(){
         })
         return allProductFromCategoryId
     }
-
     function findPhraseLocal(products, id, search = "COB" , search2 = "czarny"){
         let phase
         if(id===62) phase = 0
@@ -540,7 +657,6 @@ function app(){
         })  
         return searchedLamps
     }
-
     function findPhraseOnTheServer(allProductFromCategoryId, searchedLamps, phrase, search, phrase2, search2,) {
         allProductFromCategoryId.forEach(productID => {
             const product = frontAPI.getProduct({id: productID})
@@ -586,7 +702,6 @@ function loadValue(product){
         qty.innerText = product[i].package + " szt."
     })
 }
-
 function changeToFinallStruct(){
     function createSum(){
         const wrapp_sum = document.createElement("div")
@@ -625,7 +740,6 @@ function changeToFinallStruct(){
     })
     editeCurentlyStyle()
 }
-
 function calculatePrice(products){
     let sum = 0
     products.forEach(prod=>{
@@ -633,7 +747,6 @@ function calculatePrice(products){
     })
     return sum
 }
-
 function loadLamp(lamp){
   	const urlIMG = 'https://onled.pl/userdata/public/gfx/'
     const lampImg = document.querySelector(".app .lamp .lampImg")
@@ -645,8 +758,6 @@ function loadLamp(lamp){
     const price = document.querySelector(".app .lamp .price")
     price.innerText = lamp.price.gross.base  
 }
-
-
 function buildChoseStructApp(lamps){
     const wrapp_lamps = document.createElement("div")
     wrapp_lamps.classList.add("wrapp_lamps")
@@ -684,7 +795,6 @@ function buildChoseStructApp(lamps){
 
     return wrapp_lamps
 }     
-
 function addInformation(){
     function addInfoStruct(){
         const information = document.createElement("h2")
@@ -696,7 +806,6 @@ function addInformation(){
         el.appendChild( addInfoStruct() )
     })
 }
-
 function buildStartStructApplication(){
     const main = document.createElement("main")
     main.classList.add("app")
@@ -710,7 +819,7 @@ function buildStartStructApplication(){
                 
                 const step = document.createElement("h2")
                 step.classList.add("step")
-                step.innerText = "Wybierz rodzaj zasilania"
+                // step.innerText = "Wybierz rodzaj zasilania"
             wrapp_title.appendChild(title)
             wrapp_title.appendChild(step)
 
@@ -721,10 +830,10 @@ function buildStartStructApplication(){
                 btn_wrapp_photo1.id = "0";
                     const photo_title1 = document.createElement("h3")
                     photo_title1.classList.add("photo_title")
-                    photo_title1.innerText = "Oświetlenie 1-fazowe"
+                    // photo_title1.innerText = "Oświetlenie 1-fazowe"
                     const img1 = document.createElement("img")
                     img1.classList.add("image")
-                    img1.src = "https://onled.pl/environment/cache/images/400_400_productGfx_3827/2872.png"
+                    // img1.src = "https://onled.pl/environment/cache/images/400_400_productGfx_3827/2872.png"
                 btn_wrapp_photo1.appendChild(photo_title1)
                 btn_wrapp_photo1.appendChild(img1)
                 
@@ -733,10 +842,10 @@ function buildStartStructApplication(){
                 btn_wrapp_photo2.id = "1";
                 const photo_title2 = document.createElement("h3")
                 photo_title2.classList.add("photo_title")
-                photo_title2.innerText = "Oświetlenie 3-fazowe"
+                // photo_title2.innerText = "Oświetlenie 3-fazowe"
                     const img2 = document.createElement("img")
                     img2.classList.add("image")
-                    img2.src = "https://onled.pl/environment/cache/images/400_400_productGfx_3067/5x-Lampa-3-fazowa-25W---szyna-allegro-zestaw-czarna.jpg"
+                    // img2.src = "https://onled.pl/environment/cache/images/400_400_productGfx_3067/5x-Lampa-3-fazowa-25W---szyna-allegro-zestaw-czarna.jpg"
                 btn_wrapp_photo2.appendChild(photo_title2)
                 btn_wrapp_photo2.appendChild(img2)
             wrapp_chose.appendChild(btn_wrapp_photo1)
@@ -912,5 +1021,5 @@ const lamps = [
             ]
         },
     ]
-buildStartStructApplication()
+
 app()
