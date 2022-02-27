@@ -1,8 +1,7 @@
-/* 
+ /* 
 1-fazowe id
 lampy 62
 szyny i łączniki 63
-
 3-fazowe id
 lampy 264
 szyny i łączniki 275
@@ -75,6 +74,7 @@ function app(){
         switch (counterTitle) {
             case 0:
                 step.innerText = title[counterTitle] ? title[counterTitle] : ''
+                addInformation()
                 changeButton()
                 break;
             case 1:
@@ -86,7 +86,6 @@ function app(){
                 changeStyles(styleToggle)
                 styleToggle = !styleToggle 
                 changeButton()
-// yourChoice(answerNumber)
                 break;
             case 3:
                 step.innerText = title[counterTitle] ? title[counterTitle] : ''
@@ -106,7 +105,6 @@ function app(){
                 })
                 
                 activeButton()
-                //yourChose(answers)
                 break;
             case 4:
                 step.innerText = title[counterTitle] ? title[counterTitle] : ''
@@ -149,23 +147,28 @@ function app(){
                 const scene = document.querySelector(".app .wrapp_chose_v2")
                 scene.remove()
             
-                const lampsScene = buildChoseStructApp()
+                const lampki2 = getChoseProducts(...answers)
+                console.log(lampki2)
+                const lampsScene = buildChoseStructApp(lampki2)
                 const wrapp_chose = document.createElement("div")
                 wrapp_chose.classList.add("wrapp_chose")
                 wrapp_chose.appendChild(lampsScene)
                 document.querySelector(".app .wrapp_title").after(wrapp_chose)
+                activeButton()
 
-                //loadLamp()
+                //const lampki2 = getChoseProducts(...answers)
+                //console.log(lampki2[0])
+                //loadLamp(lampki2[0])
 
                 break;
             case 6:
                 step.innerText = title[counterTitle] ? title[counterTitle] : ''
-                scene = document.querySelector(".app .wrapp_chose_v2")
-                scene.remove()
+                const scene2 = document.querySelector(".app .wrapp_chose")
+                scene2.remove()
                 let calc = [];
                 let connL = 0;
-                const prevAnswer = answerNumber[answerNumber.length-2]
-                const railInp = answerNumber[answerNumber.length-1]
+                const prevAnswer = answerNumber[answerNumber.length-3]
+                const railInp = answerNumber[answerNumber.length-2]
 
                 for(let i = 0; i < railInp.length-1; i++){
                     switch (prevAnswer) {
@@ -201,10 +204,51 @@ function app(){
                             break;
                     }
                 }
+                calc.push(connL)
+                const RailsAndConecctors = [{name: "1m", value: 0},{name: "1,5m",value: 0}, 
+                {name: "2m", value: 0}, {name: "reszta", value: 0}, {name: "prosty", value: 0}, 
+                {name: "narożny", value: 0}]
+                calc.forEach((el,i)=>{
+                    RailsAndConecctors[i].value = el
+                })
                 // calc1.forEach(e=> calc.push(e))
-                console.log(typeof calc, calc)
+                console.log("CALC!!!!!", typeof calc, calc)
+                console.log("answerNumber[0]", answerNumber[0])
+                const phase = answerNumber[0] ? 63 : 275
+                console.log("phase", phase)
+                const productsFromCategory = frontAPI.getProductsFromCategory({
+                    id: phase, // 63 , 275
+                    urlParams: '?limit=50'
+                })
 
-                    const txt = document.createElement('p')
+                const selectedProducts = []
+                productsFromCategory.list.map(product => {
+                    product.name = product.name.toLowerCase()
+                    RailsAndConecctors.forEach(railOrConecctor=>{
+                        if(railOrConecctor.value>0){
+                          const color = answers[answers.length-1]
+                          if(product.name.includes(color.substring(0, color.length-1) ) && product.name.includes(railOrConecctor.name)){
+                                product.package = railOrConecctor.value
+                                selectedProducts.push(product)
+                            }
+                        }
+                    })
+                })
+                const product = frontAPI.getProduct({id: answerNumber[answerNumber.length-1]})
+                selectedProducts.unshift(product)
+
+                const categoryProduct = buildChoseStructApp(selectedProducts)
+                const wrapp_chose2 = document.createElement("div")
+                wrapp_chose2.classList.add("wrapp_chose")
+                wrapp_chose2.appendChild(categoryProduct)
+                document.querySelector(".app .wrapp_title").after(wrapp_chose2)
+
+                changeToFinallStruct()
+                loadValue(selectedProducts)
+                const finalPrice = calculatePrice(selectedProducts)
+                document.querySelector(".app .wrapp .wrapp_button .wrapp_sum .sum").innerText = finalPrice = "zł"
+
+                  /*  const txt = document.createElement('p')
                     const p1 = document.createElement('p')
                     const p2 = document.createElement('p')
                     const p3 = document.createElement('p')
@@ -229,10 +273,10 @@ function app(){
                     elWrapp.appendChild(p4)
                     elWrapp.appendChild(connector)
 
-                    document.querySelector(".app .wrapp_title").after(elWrapp)
+                    document.querySelector(".app .wrapp_title").after(elWrapp) */
 
-                    const lampki = getChoseProducts(...answers)
-                    console.log(lampki)
+                    //const lampki = getChoseProducts(...answers)
+                    //console.log(lampki)
                 break;
             default:
                 // changeStyles(styleToggle)
@@ -423,7 +467,8 @@ function app(){
     }
 
     function activeButton(){
-        btnWrap = document.querySelectorAll('.btn_wrapp_photo')
+        btnWrap = document.querySelectorAll('.btn_wrapp_photo').length ? document.querySelectorAll('.btn_wrapp_photo') : document.querySelectorAll('.lamp') 
+        console.log("activeButton", btnWrap)
         btnWrap.forEach(btn => {
             btn.addEventListener('focus', (e) => {
                 withBtb = btn.id
@@ -439,8 +484,8 @@ function app(){
             answerNumber.push(withBtb);
             changeScene()
         }
-        console.log("answers.length", answerNumber.length)
-        console.log("answers", answerNumber)
+        console.log("answerNumber.length", answerNumber.length)
+        console.log("answerNumber", answerNumber)
         console.log("counter", counterTitle)
 
         withBtb = null
@@ -450,6 +495,7 @@ function app(){
         btnSub = document.querySelector('.app .wrapp .wrapp_button .btn')  
         btnSub.addEventListener('click', nextPage)
     }
+
     addFunctionNextPageToButton()
 
     function getChoseProducts(whichPhase = 62, kindOfLight = "COB", whichColor = "czarny" ) {
@@ -531,47 +577,125 @@ function app(){
     //     .then(response => response.json())
     //     .then(json => console.log(json))
 }
+
+function loadValue(product){
+    const lamps = document.querySelectorAll(".app .wrapp_chose .wrapp_lamps .lamp")
+    lamps.forEach((lamp, i)=>{
+        const qty = lamp.querySelector(".qty")
+        console.log(qty)
+        qty.innerText = product[i].package + " szt."
+    })
+}
+
+function changeToFinallStruct(){
+    function createSum(){
+        const wrapp_sum = document.createElement("div")
+        wrapp_sum.classList.add("wrapp_sum")
+            const sum = document.createElement("p")
+            sum.classList.add("sum")
+            sum.innerText = "Suma: "
+            const value = document.createElement("p")
+            value.classList.add("value")
+        wrapp_sum.appendChild(sum)
+        wrapp_sum.appendChild(value)
+        return wrapp_sum
+    }
+    function createQuantity(){
+        const qty = document.createElement("p")
+        qty.classList.add("qty")
+        return qty
+    }
+    function editeCurentlyStyle(){
+        const wrapp_btn = document.querySelector(".app .wrapp .wrapp_button")
+        wrapp_btn.style.justifyContent = "space-between"
+        const lamps = document.querySelectorAll(".app .wrapp_chose .wrapp_lamps .lamp")
+        lamps.forEach(lamp=>{
+            lamp.style.position = "relative"
+        })
+    }
+    const sum = createSum()
+    const btn = document.querySelector(".app .wrapp .wrapp_button .btn")
+    btn.innerText = "Zamawiam"
+    document.querySelector(".app .wrapp .wrapp_button").insertBefore(sum, btn)
+    
+    const lamps = document.querySelectorAll(".app .wrapp_chose .wrapp_lamps .lamp")
+    lamps.forEach((lamp,i)=>{
+      	const quantity = createQuantity()
+        lamp.appendChild(quantity)
+    })
+    editeCurentlyStyle()
+}
+
+function calculatePrice(products){
+    let sum = 0
+    products.forEach(prod=>{
+        sum += +prod.package * +prod.price.gross.base_float
+    })
+    return sum
+}
+
 function loadLamp(lamp){
+  	const urlIMG = 'https://onled.pl/userdata/public/gfx/'
     const lampImg = document.querySelector(".app .lamp .lampImg")
-    lampImg.src = lamp.main_image_filename
+    lampImg.src = urlIMG + lamp.main_image_filename
     const title = document.querySelector(".app .lamp .justLeft p")
     title.innerText = lamp.name
     const avaiblity = document.querySelector(".app .lamp .textTogether .avaiblity")
-    avaiblity.innerText = lamp.attributes.avaiblity // trzeba zobaczyć jak będzie prawidłowo
+    avaiblity.innerText = lamp.availability.name
     const price = document.querySelector(".app .lamp .price")
-    price = lamp.price.brutto // trzeba zobaczyć jak będzie prawidłowo
+    price.innerText = lamp.price.gross.base  
 }
 
 
-function buildChoseStructApp(){
+function buildChoseStructApp(lamps){
     const wrapp_lamps = document.createElement("div")
     wrapp_lamps.classList.add("wrapp_lamps")
-        const lamp = document.createElement("div")
-        lamp.classList.add("lamp")
-            const lampImg = document.createElement("img")
-            lampImg.classList.add("lampImg")
-            const justLeft = document.createElement("div")
-            justLeft.classList.add("justLeft")
-                const p = document.createElement("p")
-                const textTogether = document.createElement("div")
-                textTogether.classList.add("textTogether")
-                    const p1 = document.createElement("p")
-                    p1.innerText = "Dostępność: "
-                    const avaiblity = document.createElement("p")
-                    avaiblity.classList.add("avaiblity")
-                textTogether.appendChild(p1)
-                textTogether.appendChild(avaiblity)
-                const price = document.createElement("p")
-                price.classList.add("avaiblity")
-            justLeft.appendChild(p)
-            justLeft.appendChild(textTogether)
-            justLeft.appendChild(price)
-        lamp.appendChild(lampImg)
-        lamp.appendChild(justLeft)
-    wrapp_lamps.appendChild(lamp) 
+    const urlIMG = 'https://onled.pl/userdata/public/gfx/'
+    lamps.forEach((el)=>{
+        const lamp = document.createElement("button")
+            lamp.classList.add("lamp")
+            lamp.id = el.id
+                const lampImg = document.createElement("img")
+                lampImg.classList.add("lampImg")
+                lampImg.src = urlIMG + el.main_image_filename
+                const justLeft = document.createElement("div")
+                justLeft.classList.add("justLeft")
+                    const p = document.createElement("p")
+                    p.innerText = el.name
+                    const textTogether = document.createElement("div")
+                    textTogether.classList.add("textTogether")
+                        const p1 = document.createElement("p")
+                        p1.innerText = "Dostępność: "
+                        const avaiblity = document.createElement("p")
+                        avaiblity.classList.add("avaiblity")
+                        avaiblity.innerText = el.availability.name
+                    textTogether.appendChild(p1)
+                    textTogether.appendChild(avaiblity)
+                    const price = document.createElement("p")
+                    price.classList.add("price")
+                    price.innerText = el.price.gross.base
+                justLeft.appendChild(p)
+                justLeft.appendChild(textTogether)
+                justLeft.appendChild(price)
+            lamp.appendChild(lampImg)
+            lamp.appendChild(justLeft)
+        wrapp_lamps.appendChild(lamp) 
+        })
 
     return wrapp_lamps
-}   
+}     
+
+function addInformation(){
+    function addInfoStruct(){
+        const information = document.createElement("h2")
+        information.classList.add("information")
+        information.innerText = "i"
+        return information
+    }
+    document.querySelectorAll(".app .wrapp .wrapp_chose .btn_wrapp_photo").forEach(el=>{
+        el.appendChild( addInfoStruct() )
+    })
+}
 
 function buildStartStructApplication(){
     const main = document.createElement("main")
@@ -631,6 +755,7 @@ function buildStartStructApplication(){
     main.appendChild(wrapp)
 
     document.querySelector("body").appendChild(main)
+    addInformation()
     }   
 const lamps = [
         {

@@ -3,7 +3,7 @@
     padding: 0;
     margin: 0;
 }
-.app{
+.app {
     display: flex;
     height: 100vh;
     flex-direction: column;
@@ -11,74 +11,69 @@
     justify-content: center;
     text-align: center;
 }
-.app .wrapp{
+.app .wrapp {
     width: 90vw;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
 }
-.app .wrapp .wrapp_title{
-    height: 20%
+.app .wrapp .wrapp_title {
+    height: 20%;
 }
-.app .wrapp .wrapp_title .title,.step{
+.app .wrapp .wrapp_title .title {
     margin: 10px;
 }
-.app .wrapp .wrapp_chose{
+.app .wrapp .wrapp_chose {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    height: 60%
+    height: 60%;
 }
-.app .wrapp .wrapp_chose_v2{
+.app .wrapp .wrapp_chose_v2 {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 60%
+    height: 60%;
 }
-.app .wrapp .btn_wrapp_title{
+.app .wrapp .wrapp_chose_v2 .wrapp_chose .inp {
+    margin: 2%;
+    width: 15%;
+}
+.app .wrapp .wrapp_chose_v2 .wrapp_chose .inp:invalid {
+    border: 1px solid red;
+}
+.app .wrapp .btn_wrapp_title {
     background-color: white;
     margin: 3%;
     width: 60%;
     height: 18%;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border: none; 
+    box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
+    border: none;
 }
-.app .wrapp .btn_wrapp_photo{
+.app .wrapp .btn_wrapp_title:focus {
+    border: 2px solid #FF7E00;
+}
+.app .wrapp .btn_wrapp_photo {
     background-color: white;
     margin: 7%;
     width: 30vw;
     height: 35vw;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border: none;  
+    box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
+    border: none;
 }
-.app .wrapp .btn_wrapp_photo:focus, .app .wrapp .btn_wrapp_title:focus{
+.app .wrapp .btn_wrapp_photo:focus {
     border: 2px solid #FF7E00;
 }
-
-.app .wrapp .btn_wrapp_photo .image{
-    height: 50%; 
+.app .wrapp .btn_wrapp_photo .image {
+    height: 50%;
 }
-@media screen and (min-width: 640px) {
-    .app .wrapp{
-        width: 45vw;
-        height: 35vw;
-    }
-    .app .wrapp .btn_wrapp_photo{
-        width: 13vw;
-        height: 15vw;
-    }
-   
-    .app .wrapp .btn_wrapp_photo .image{
-        height: 55%; 
-    }
-}
-.app .wrapp .wrapp_button{
-    display:flex;
+.app .wrapp .wrapp_button {
+    display: flex;
     justify-content: flex-end;
     align-items: flex-end;
     height: 20%;
 }
-.app .wrapp .wrapp_button .btn{
+.app .wrapp .wrapp_button .btn {
     background: #ff7e00;
     border: 0;
     color: #fff;
@@ -87,17 +82,72 @@
     letter-spacing: 3px;
     font-weight: bold;
 }
-.app .wrapp .wrapp_button .btn:hover{
+.app .wrapp .wrapp_button .btn:hover {
     cursor: pointer;
 }
-.app .wrapp .wrapp_chose_v2 .wrapp_chose .inp{
-    margin: 2%;
-    width: 15%;
+.app .wrapp_chose .wrapp_lamps {
+    display: flex;
+    flex-flow: column;
+    width: 85%;
+    height: 100%;
+    overflow: auto;
+    box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
 }
-.app .wrapp .wrapp_chose_v2 .wrapp_chose .inp:invalid {
-    border: 1px solid red;
+.app .wrapp_chose .wrapp_lamps .lamp {
+    display: flex;
+    width: 100%;
+    height: 30%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    transition: box-shadow .4s;
+    background: white;
+    border: none;
 }
-
+.app .wrapp_chose .wrapp_lamps .lamp:hover {
+    cursor: pointer;
+    box-shadow: 0px 0px 8px .5px #42445a;
+}
+.app .wrapp_chose .wrapp_lamps .lamp:focus {
+    box-shadow: 0px 0px 8px .5px #67b331;
+}
+.app .wrapp_chose .wrapp_lamps .lamp .justLeft {
+    text-align: left;
+}
+.app .wrapp_chose .wrapp_lamps .lamp .justLeft .textTogether {
+    display: flex;
+}
+.app .wrapp_chose .wrapp_lamps .lamp .justLeft .textTogether .avaiblity {
+    color: #67B331;
+}
+.app .wrapp_chose .wrapp_lamps .lamp .justLeft .price {
+    color: #67B331;
+    font-size: 1.5vw;
+    font-weight: bold;
+}
+.app .wrapp_chose .wrapp_lamps .lamp .lampImg {
+    height: 100%;
+    max-width: 18%;
+    margin-right: 3%;
+}
+.step {
+    margin: 10px;
+}
+.wrapp_chose .wrapp_lamps .lamp .justLeft p {
+    margin: 2px 2px 3px 5px;
+}
+@media screen and (min-width: 640px) {
+    .app .wrapp {
+        width: 45vw;
+        height: 35vw;
+   }
+    .app .wrapp .btn_wrapp_photo {
+        width: 13vw;
+        height: 15vw;
+   }
+    .app .wrapp .btn_wrapp_photo .image {
+        height: 55%;
+   }
+}
 
 
 .wrapp_lamps{
@@ -142,3 +192,61 @@
     font-weight: bold;
   }
 
+
+  .app .wrapp .wrapp_chose .wrapp_lamps .lamp .qty{
+    position: absolute;
+    right: 5%;
+    top: 70%;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .app .wrapp .wrapp_button .wrapp_sum{
+    display: flex;
+    align-self: center;
+    margin-left: 4%;
+  }
+  .app .wrapp .wrapp_button .wrapp_sum .sum{
+    font-size: 25px;
+  }
+  
+  .app .wrapp .wrapp_button .wrapp_sum .value{
+    margin-left: 10px;
+    font-size: 26px;
+    font-weight: bold;
+    color: #67B331;
+    
+  }
+  
+  .information{
+    font-size: 2vw;
+    font-family: Luminari;
+    font-style: oblique;
+    position: absolute;
+    color: #67B331;
+    bottom: 2%;
+    right: 6%;
+    cursor: pointer;
+   }
+  .information::after{
+  /*   content: " 23"; */
+    content: attr(data-after);
+    font-family: roboto;
+    font-size: 1.2vw;
+    font-style: normal;
+    color: black;
+    display: block;
+    position: absolute;
+    top: -12.32vw;
+    left: -11.60vw;
+    width: 13vw;
+    height: 15vw;
+    padding-top: 20px;
+    background-color: white;
+    opacity: .95;
+    transform: translateY(100%);
+    transition: transform 1s;
+  }
+  .information:hover::after{
+    transform: translateY(0);
+  }
