@@ -120,6 +120,7 @@ function app(){
 
                 clearScene()
                 insertStruct( buildCanvaStructur() )
+                changeSizePhotoWrappForCanva()
                 activeButton()
                 addFunctionNextPageToButton()
                 step.innerText = title[counterTitle] ? title[counterTitle] : ''
@@ -134,9 +135,9 @@ function app(){
                 // photoWrap = document.querySelectorAll(".app .btn_wrapp_photo")
                 changeButton()
                 AllShapesCanvas.drawAllShapes()
-                // addEventListener("resize", (e)=>{
-                //     AllShapesCanvas.drawAllShapes()
-                // })
+                addEventListener("resize", (e)=>{
+                    AllShapesCanvas.drawAllShapes()
+                })
                 
                 // activeButton()
                 break;
@@ -183,12 +184,13 @@ function app(){
                 break;
             case 6:
                 step.innerText = title[counterTitle] ? title[counterTitle] : ''
-                const scene = document.querySelector(".app .wrapp_chose_v2")
-                scene.remove()
+                document.querySelector(".app .wrapp_chose_v2").remove()
+                // const scene = document.querySelector(".app .wrapp_chose_v2")
+                // scene.remove()
             
-                const lampki2 = getChoseProducts(...answers)
-                console.log(lampki2)
-                const lampsScene = buildChoseStructApp(lampki2)
+                const lamps = getChoseProducts(...answers)
+                // console.log(lamps)
+                const lampsScene = buildChoseStructApp(lamps)
                 const wrapp_chose = document.createElement("div")
                 wrapp_chose.classList.add("wrapp_chose")
                 wrapp_chose.appendChild(lampsScene)
@@ -202,8 +204,9 @@ function app(){
                 break;
             case 7:
                 step.innerText = title[counterTitle] ? title[counterTitle] : ''
-                const scene2 = document.querySelector(".app .wrapp_chose")
-                scene2.remove()
+                document.querySelector(".app .wrapp_chose").remove()
+                // const scene2 = document.querySelector(".app .wrapp_chose")
+                // scene2.remove()
                 let calc = [];
                 let connL = 0;
                 const prevAnswer = answerNumber[answerNumber.length-3]
@@ -226,6 +229,17 @@ function app(){
                             }
                             break;
                         case '2':
+                            calc[i] = calculation(railInp[i], +answerNumber[0])
+                            connL = 2
+                            if(i>0){
+                                const buff =[]
+                                calc[0].forEach((el, j)=>{
+                                    buff.push( el + (calc[1][j]) )
+                                })
+                                calc = buff
+                            }
+                        break;
+                        case '3':
                             // calc[i] = calculation(railInp[i]*2)
                             const calcBufor = calculation(railInp[i], +answerNumber[0])
                             calc[i] = calcBufor.map(el=>el*2)
@@ -382,6 +396,7 @@ function app(){
             const text0 = createFormField("Długość odcinka w metrach", "0.1" , "0.1")
             const text1 = createFormField("Długość odcinka A w metrach", "0.1" , "0.1")
             const text2 = createFormField("Długość odcinka B w metrach", "0.1" , "0.1")
+            const text4 = createFormField("Długość odcinka C w metrach", "0.1" , "0.1")
             const text3 = createFormField("Ilość punktów świetlnych:", "1" , "0")
 
             wrapp.appendChild(canvas)
@@ -391,6 +406,9 @@ function app(){
             else{
                 wrapp.appendChild(text1)
                 wrapp.appendChild(text2)
+            }
+            if(answer === '2'){
+                wrapp.appendChild(text4)
             }
             wrapp.appendChild(text3)
         }
@@ -470,6 +488,13 @@ function app(){
             })
         }
         counterTitle++
+    }
+    function changeSizePhotoWrappForCanva(){
+        const btn_wrapp_photo = document.querySelectorAll(".app .btn_wrapp_photo")
+        btn_wrapp_photo.forEach(el=>{
+            el.style.width = "10vw"
+            el.style.height = "10vw"
+        })
     }
     function buildCanvaStructur(){
         const wrapp_chose_v2 = document.createElement("div")

@@ -55,6 +55,8 @@
 }
 .app .wrapp .btn_wrapp_photo {
     background-color: white;
+    position: relative;
+    overflow: hidden;
     margin: 7%;
     width: 30vw;
     height: 35vw;
