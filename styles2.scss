@@ -1,0 +1,257 @@
+.app {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	.wrapp {
+		width: 90vw;
+      	margin: 40px 0;
+		box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
+		.wrapp_title {
+			height: 20%;
+			.title {
+				margin: 10px;
+			}
+		}
+		.wrapp_chose {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+			height: 60%;
+			.wrapp_lamps {
+				.lamp {
+					.qty {
+						position: absolute;
+						right: 5%;
+						top: 70%;
+						font-size: 20px;
+						font-weight: bold;
+					}
+				}
+			}
+		}
+		.wrapp_chose_v2 {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			height: 60%;
+			.wrapp_chose {
+				.inp {
+					margin: 2%;
+					width: 15%;
+					&:invalid {
+						border: 1px solid red;
+					}
+				}
+			}
+		}
+		.btn_wrapp_title {
+			background-color: white;
+			margin: 3%;
+			width: 60%;
+			height: 18%;
+			box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
+			border: none;
+			&:focus {
+				border: 2px solid #FF7E00;
+			}
+		}
+		.btn_wrapp_photo {
+			    display: flex;
+                background-color: white;
+                position: relative;
+                overflow: hidden;
+                margin: 7%;
+                width: 30vw;
+                height: 35vw;
+                box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
+                border: none;
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-evenly;
+			&:focus {
+				border: 2px solid #FF7E00;
+			}
+          	.photo_title{
+              font-size: 1vw;
+              line-height: 1vw;
+            }
+			.image {
+				height: 50%;
+			}
+          	.information{
+            font-size: 5vw;
+			font-weight: bold;
+            font-family: Luminari;
+            font-style: oblique;
+            position: absolute;
+            color: #67B331;
+            bottom: 2%;
+            right: 6%;
+            cursor: pointer;
+              &::after{
+                content: attr(data-after);
+                font-family: roboto;
+                font-size: 1.2vw;
+                font-style: normal;
+                color: black;
+                display: block;
+                position: absolute;
+                top: -28vw;
+                left: -27vw;
+                width: 30vw;
+                height: 32vw;
+                padding-top: 20px;
+                background-color: white;
+                opacity: .95;
+                transform: translateY(100%);
+                transition: transform 1s;
+              }
+              &:hover::after{
+                transform: translateY(0)
+              }
+           }
+		}
+		.wrapp_button {
+			display: flex;
+			justify-content: flex-end;
+			align-items: flex-end;
+			height: 20%;
+			.btn {
+				background: #ff7e00;
+				border: 0;
+				color: #fff;
+				padding: 13px;
+				margin: 30px;
+				letter-spacing: 3px;
+				font-weight: bold;
+				&:hover {
+					cursor: pointer;
+				}
+			}
+			.wrapp_sum {
+				display: flex;
+				align-self: center;
+				margin-left: 4%;
+				.sum {
+					font-size: 25px;
+				}
+				.value {
+					margin-left: 10px;
+					font-size: 26px;
+					font-weight: bold;
+					color: #67B331;
+				}
+			}
+		}
+	}
+	.wrapp_chose {
+		.wrapp_lamps {
+			display: flex;
+			flex-flow: column;
+			width: 85%;
+			height: 100%;
+			overflow: auto;
+			box-shadow: 0px 4px 4px rgba(0,0,0,0.25);
+			.lamp {
+				display: flex;
+				width: 100%;
+				height: 30%;
+				margin-top: 2%;
+				margin-bottom: 2%;
+				transition: box-shadow .4s;
+				background: white;
+				border: none;
+				&:hover {
+					cursor: pointer;
+					box-shadow: 0px 0px 8px .5px #42445a;
+				}
+				&:focus {
+					box-shadow: 0px 0px 8px .5px #67b331;
+				}
+				.justLeft {
+					text-align: left;
+					.textTogether {
+						display: flex;
+						.avaiblity {
+							color: #67B331;
+						}
+					}
+					.price {
+						color: #67B331;
+						font-size: 1.3vw;
+						font-weight: bold;
+					}
+				}
+				.lampImg {
+					height: auto;
+					max-width: 18%;
+					margin-right: 3%;
+				}
+			}
+		}
+	}
+}
+.step {
+	margin: 10px;
+}
+.wrapp_chose {
+	.wrapp_lamps {
+		.lamp {
+			.justLeft {
+				p {
+					margin: 2px 2px 3px 5px;
+					margin: 2px 2px 3px 5px;
+				}
+			}
+		}
+	}
+}
+.wrapp_lamps {
+	display: flex;
+	flex-flow: column;
+	width: 85%;
+	height: 100%;
+	overflow: auto;
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+.lamp {
+	display: flex;
+	width: 100%;
+	height: 30%;
+	margin-top: 2%;
+	margin-bottom: 2%;
+	transition: box-shadow .4s;
+	&:hover {
+		cursor: pointer;
+		box-shadow: 0px 0px 8px .5px rgba(66, 68, 90, 1);
+	}
+}
+
+@media screen and (min-width: 640px) {
+	.app {
+		.wrapp {
+			width: 30vw;
+          	height: 30vw;
+			.btn_wrapp_photo {
+				width: 13vw;
+				height: 14vw;
+				.image {
+					height: 55%;
+				}
+              	.information{
+                 	font-size: 2vw;
+                  	&::after{
+                      width: 11vw;
+                      height: 15vw;
+                      top: -12.32vw;
+                      left: -9.6vw;
+                    }
+                 }
+			}
+		}
+	}
+}

@@ -137,20 +137,6 @@
 .wrapp_chose .wrapp_lamps .lamp .justLeft p {
     margin: 2px 2px 3px 5px;
 }
-@media screen and (min-width: 640px) {
-    .app .wrapp {
-        width: 45vw;
-        height: 35vw;
-   }
-    .app .wrapp .btn_wrapp_photo {
-        width: 13vw;
-        height: 15vw;
-   }
-    .app .wrapp .btn_wrapp_photo .image {
-        height: 55%;
-   }
-}
-
 
 .wrapp_lamps{
     display: flex;
@@ -217,11 +203,10 @@
     font-size: 26px;
     font-weight: bold;
     color: #67B331;
-    
   }
   
   .information{
-    font-size: 2vw;
+    font-size: 5vw;
     font-family: Luminari;
     font-style: oblique;
     position: absolute;
@@ -231,7 +216,7 @@
     cursor: pointer;
    }
   .information::after{
-  /*   content: " 23"; */
+    /* content: " 23"; */
     content: attr(data-after);
     font-family: roboto;
     font-size: 1.2vw;
@@ -239,10 +224,10 @@
     color: black;
     display: block;
     position: absolute;
-    top: -12.32vw;
-    left: -11.60vw;
-    width: 13vw;
-    height: 15vw;
+    top: -28vw;
+    left: -27vw;
+    width: 30vw;
+    height: 32vw;
     padding-top: 20px;
     background-color: white;
     opacity: .95;
@@ -252,3 +237,29 @@
   .information:hover::after{
     transform: translateY(0);
   }
+
+
+  @media screen and (min-width: 640px) {
+    .app .wrapp {
+        width: 45vw;
+        height: 35vw;
+   }
+    .app .wrapp .btn_wrapp_photo {
+        width: 13vw;
+        height: 15vw;
+   }
+    .app .wrapp .btn_wrapp_photo .image {
+        height: 55%;
+   }
+   
+   .information{
+    font-size: 2vw;
+   }
+
+   .information::after{
+        width: 13vw;
+        height: 15vw;
+        top: -12.32vw;
+        left: -11.60vw;
+    }
+}

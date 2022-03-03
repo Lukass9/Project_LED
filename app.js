@@ -94,6 +94,9 @@ function app(){
                 resetStruct()
                 step.innerText = title[counterTitle] ? title[counterTitle] : ''
                 addInformation()
+                addTextToInformation([
+                    "Oświetlenia tego użyjesz, gdy chcesz aby wszystkie reflektory zapalały się od jednego przełącznika",
+                    "Dzięki temu podłączeniu możesz oświetlać 3 strefy za pomocą trzech różnych przełączników"])
                 addFirstButton(productTitle[0])
                 break;
             case 1:
@@ -238,7 +241,7 @@ function app(){
                                 })
                                 calc = buff
                             }
-                        break;
+                            break;
                         case '3':
                             // calc[i] = calculation(railInp[i]*2)
                             const calcBufor = calculation(railInp[i], +answerNumber[0])
@@ -492,7 +495,7 @@ function app(){
     function changeSizePhotoWrappForCanva(){
         const btn_wrapp_photo = document.querySelectorAll(".app .btn_wrapp_photo")
         btn_wrapp_photo.forEach(el=>{
-            el.style.width = "10vw"
+            // el.style.width = "10vw"
             el.style.height = "10vw"
         })
     }
@@ -831,6 +834,15 @@ function addInformation(){
         el.appendChild( addInfoStruct() )
     })
 }
+
+function addTextToInformation(text){
+    document.querySelectorAll(".wrapp_chose .btn_wrapp_photo").forEach((el,i)=>{
+      el.querySelector(".information").addEventListener("mouseover", (e)=>{
+        e.target.setAttribute('data-after', text[i] )
+      })
+    })
+}
+
 function buildStartStructApplication(){
     const main = document.createElement("main")
     main.classList.add("app")
