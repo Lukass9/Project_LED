@@ -18,69 +18,143 @@
        changeScene()
    
        class AllShapesCanvas{
-           static setSizeCanva(element){
-               const app = document.querySelector(".app")
-               const btnWrap = app.querySelectorAll('.btn_wrapp_photo')
-           element.width=btnWrap[0].offsetWidth
-           element.height = btnWrap[0].offsetWidth * 0.8;
-           }
-           static paintLine(ctx, canv){
-               ctx.beginPath();
-               ctx.lineTo(canv.width/4, canv.height/2);
-               ctx.lineTo(canv.width/1.30, canv.height/2);
-               ctx.stroke();
-           }
-           static paintL(ctx, canv){
-               ctx.beginPath();
-               ctx.lineTo(canv.width/4, canv.height/4);
-               ctx.lineTo(canv.width/4, canv.height/1.25);
-               ctx.lineTo(canv.width/1.25, canv.height/1.25);
-               ctx.stroke();
-           }
-           static paintU(ctx, canv){
-               ctx.beginPath();
-               ctx.lineTo(canv.width/4, canv.height/4);
-               ctx.lineTo(canv.width/4, canv.height/1.25);
-               ctx.lineTo(canv.width/1.25, canv.height/1.25);
-               ctx.lineTo(canv.width/1.25, canv.height/4);
-               ctx.stroke();
-             }
-           static paintSquare(ctx, canv){
-               ctx.beginPath();
-               ctx.rect(canv.width/4, canv.height/4, canv.width/2, canv.height/2);
-               ctx.stroke();
-           }
-           static paintMark(ctx,canv){
-               ctx.font = "italic bold 18px Arial";
-               ctx.fillText("A", canv.width/5, canv.height/1.8);
-               ctx.fillText("B", canv.width/2, canv.height/1.09);
-           }
-   
-           static paintMarkU(ctx,canv){
-               this.paintMark(ctx,canv)
-               ctx.fillText("C", canv.width/1.24, canv.height/1.8);
-             }
-             
-           static drawAllShapes(){
-               const app = document.querySelector(".app")
-               const btnWrap = app.querySelectorAll('.btn_wrapp_photo')
-               btnWrap.forEach((btn, i)=>{
-                   const canv = btn.querySelector(".canv")
-                   const ctx = canv.getContext("2d");
-                   AllShapesCanvas.setSizeCanva(canv)
-                   switch(i){
-                       case 0: AllShapesCanvas.paintLine(ctx, canv)
-                           break;
-                       case 1: AllShapesCanvas.paintL(ctx, canv)
-                           break;
-                       case 2: AllShapesCanvas.paintU(ctx, canv)
-                           break;
-                       case 3: AllShapesCanvas.paintSquare(ctx, canv)
-                           break;
-                   }
-               })
-           }
+        static setSizeCanva(element){
+         element.width=btnWrap[0].offsetWidth
+         element.height = btnWrap[0].offsetWidth * 0.8;
        }
+       static paintLine(ctx, canv){
+         ctx.beginPath();
+         ctx.lineWidth = 3
+         ctx.lineTo(canv.width/4, canv.height/2);
+         ctx.lineTo(canv.width/1.30, canv.height/2);
+         ctx.stroke();
+       }
+       static paintL(ctx, canv){
+         ctx.beginPath();
+         ctx.lineWidth = 3
+         ctx.lineTo(canv.width/4, canv.height/4);
+         ctx.lineTo(canv.width/4, canv.height/1.25);
+         ctx.lineTo(canv.width/1.25, canv.height/1.25);
+         ctx.stroke();
+       }
+       static paintU(ctx, canv){
+         ctx.beginPath();
+         ctx.lineWidth = 3
+         ctx.lineTo(canv.width/4, canv.height/4);
+         ctx.lineTo(canv.width/4, canv.height/1.25);
+         ctx.lineTo(canv.width/1.25, canv.height/1.25);
+         ctx.lineTo(canv.width/1.25, canv.height/4);
+         ctx.stroke();
+       }
+       static paintX(ctx, canv){
+         ctx.beginPath()
+         ctx.lineWidth = 3
+         ctx.lineTo(canv.width/2, canv.height/5);
+         ctx.lineTo(canv.width/2, canv.height/1.25);
+         
+         ctx.moveTo(canv.width/1.3, canv.height/2);
+         ctx.lineTo(canv.width/4, canv.height/2);
+         ctx.stroke()
+       }
+       static paintXHelpLine(ctx, canv){
+         ctx.beginPath()
+         ctx.lineWidth = 1
+         ctx.setLineDash([5, 1])
+         ctx.strokeStyle = "gray"
+         ctx.moveTo(canv.width/2.1, canv.height/5);
+         ctx.lineTo(canv.width/2.1, canv.height/2.1);
+         
+         ctx.moveTo(canv.width/1.9, canv.height/1.9);
+         ctx.lineTo(canv.width/1.9, canv.height/1.25);
+         
+         ctx.moveTo(canv.width/1.31, canv.height/2.2);
+         ctx.lineTo(canv.width/1.9, canv.height/2.2);
+         
+         ctx.moveTo(canv.width/4, canv.height/1.8);
+         ctx.lineTo(canv.width/2.1, canv.height/1.8);
+         
+         ctx.stroke()
+       } 
+       static paintT(ctx, canv){
+         ctx.beginPath()
+         ctx.lineWidth = 3
+         ctx.lineTo(canv.width/2, canv.height/5);
+         ctx.lineTo(canv.width/2, canv.height/1.25);
+         
+         ctx.moveTo(canv.width/1.3, canv.height/5);
+         ctx.lineTo(canv.width/4, canv.height/5);
+         ctx.stroke()
+       }
+     static paintTHelpLine(ctx, canv){
+         ctx.beginPath()
+         ctx.lineWidth = 1
+         ctx.setLineDash([5, 1])
+         ctx.strokeStyle = "gray"
+         
+         ctx.moveTo(canv.width/2.1, canv.height/5);
+         ctx.lineTo(canv.width/2.1, canv.height/1.25);
+         
+         ctx.moveTo(canv.width/1.31, canv.height/6.3);
+         ctx.lineTo(canv.width/1.9, canv.height/6.3);
+         
+         ctx.moveTo(canv.width/4, canv.height/6.3);
+         ctx.lineTo(canv.width/2.1, canv.height/6.3);
+         
+         ctx.stroke()
+       } 
+       static paintSquare(ctx, canv){
+         ctx.beginPath();
+         ctx.lineWidth = 3
+         ctx.rect(canv.width/4, canv.height/4, canv.width/2, canv.height/2);
+         ctx.stroke();
+       }
+       static paintMark(ctx,canv){
+         ctx.font = "italic bold 18px Arial";
+         ctx.fillText("A", canv.width/5, canv.height/1.8);
+         ctx.fillText("B", canv.width/2, canv.height/1.09);
+       }
+       static paintMarkU(ctx,canv){
+         this.paintMark(ctx,canv)
+         ctx.fillText("C", canv.width/1.24, canv.height/1.8);
+       }
+       static paintMarkX(ctx,canv){
+         ctx.font = "italic bold 18px Arial";
+         ctx.fillText("A", canv.width/4, canv.height/1.5);
+         ctx.fillText("B", canv.width/1.88, canv.height/1.2);
+         ctx.fillText("C", canv.width/1.4, canv.height/2.3);
+         ctx.fillText("D", canv.width/2.4, canv.height/4);
+       }
+       static paintMarkT(ctx,canv){
+         ctx.font = "italic bold 18px Arial";
+         ctx.fillText("A", canv.width/3, canv.height/7);
+         ctx.fillText("B", canv.width/1.6, canv.height/7);
+         ctx.fillText("C", canv.width/2.5, canv.height/1.9);
+       }
+       
+       static drawAllShapes(){
+         const app = document.querySelector(".app")
+         const btnWrap = app.querySelectorAll('.btn_wrapp_photo')
+         btnWrap.forEach((btn, i)=>{
+           const canv = btn.querySelector(".canv")
+           const ctx = canv.getContext("2d");
+           AllShapesCanvas.setSizeCanva(canv)
+           switch(i){
+            case 0: AllShapesCanvas.paintLine(ctx, canv)
+                break;
+            case 1: AllShapesCanvas.paintT(ctx, canv)
+                break;
+            case 2: AllShapesCanvas.paintX(ctx, canv)
+                break;
+            case 3: AllShapesCanvas.paintL(ctx, canv)
+                break;
+            case 4: AllShapesCanvas.paintU(ctx, canv)
+                break;
+            case 5: AllShapesCanvas.paintSquare(ctx, canv)
+                break;
+           }
+         })
+       } 
+   }
    
        function changeScene() {
            const title = ["Wybierz rodzaj zasilania", "Wybierz źródło światła", "Wybierz  kolor", "", "Schemat ułożenia", "", "Wybierz Lampę", "Podsumowanie"]
@@ -119,15 +193,20 @@
                case 3:
                    resetStruct()
                    step.innerText = title[counterTitle] ? title[counterTitle] : ''
+                   styleToggle = true;
                    changeStyles(styleToggle)
-                   styleToggle = !styleToggle 
+                   
                    changeButton()
                    addBackButton()
-                   break;
+                   counterTitle++
+                   answerNumber.push(0)
+                //    break;
                case 4:
+                   console.log("counterTitle ==" ,counterTitle)
+                    styleToggle = false;
                    changeStyles(styleToggle)
-                   styleToggle = !styleToggle 
-   
+ 
+                   clearScene()
                    clearScene()
                    insertStruct( buildCanvaStructur() )
                    changeSizePhotoWrappForCanva()
@@ -151,6 +230,7 @@
                    })
                    
                    // activeButton()
+                   resetNextButton()
                    addBackButton()
                    break;
                case 5:
@@ -159,40 +239,52 @@
                    deleteScene()
                    const wrapp = document.querySelector(".app .wrapp_chose")
                    createCalculationScene(wrapp, answer)
+                   styleToggle = true;
                    changeStyles(styleToggle)
-                   styleToggle = !styleToggle
                    const canv = document.querySelector(".app .wrapp_chose_v2 .canv")
                    const ctx = canv.getContext("2d");
-   
+                   addBackButton()
                    validation()
                    const inp = document.querySelectorAll('.app input')
                    inp.forEach((el,i)=>{
                        el.addEventListener("change", validation)
                        el.addEventListener("change", ()=>{ // setInputValue
                            input[i] =  +el.value
+                           console.log(input[i])
                        })
                    })
                    switch (answer) {
                        case '0':
                            AllShapesCanvas.paintLine(ctx, canv)
                            break;
-                       case '1':
-                           AllShapesCanvas.paintL(ctx, canv)
-                           AllShapesCanvas.paintMark(ctx,canv)
-                           break;
-                       case '2':
-                           AllShapesCanvas.paintU(ctx, canv)
-                           AllShapesCanvas.paintMark(ctx,canv)
-                           AllShapesCanvas.paintMarkU(ctx,canv)
-                           break;
-                       case '3':
-                           AllShapesCanvas.paintSquare(ctx, canv)
-                           AllShapesCanvas.paintMark(ctx,canv)
-                           break;
-                       default:
-                           alert("coś poszło nie tak")
-                           break;
-                   }
+                        case '1':
+                            AllShapesCanvas.paintT(ctx, canv)
+                            AllShapesCanvas.paintTHelpLine(ctx, canv)
+                            AllShapesCanvas.paintMarkT(ctx, canv)
+                            break;
+                        case '2':
+                            AllShapesCanvas.paintX(ctx, canv)
+                            AllShapesCanvas.paintXHelpLine(ctx, canv)
+                            AllShapesCanvas.paintMarkX(ctx, canv)
+                            break;
+                        case '3':
+                            AllShapesCanvas.paintL(ctx, canv)
+                            AllShapesCanvas.paintMark(ctx,canv)
+                            break;
+                        case '4':
+                            AllShapesCanvas.paintU(ctx, canv)
+                            AllShapesCanvas.paintMark(ctx,canv)
+                            AllShapesCanvas.paintMarkU(ctx,canv)
+                            break;
+                        case '5':
+                            AllShapesCanvas.paintSquare(ctx, canv)
+                            AllShapesCanvas.paintMark(ctx,canv)
+                            break;
+                        default:
+                            alert("coś poszło nie tak")
+                            break;
+                    }
+                  
                    break;
                case 6:
                    step.innerText = title[counterTitle] ? title[counterTitle] : ''
@@ -212,7 +304,7 @@
                    //const lampki2 = getChoseProducts(...answers)
                    //console.log(lampki2[0])
                    //loadLamp(lampki2[0])
-   
+                   deleteBackButton()
                    break;
                case 7:
                   step.innerText = title[counterTitle] ? title[counterTitle] : ''
@@ -326,9 +418,117 @@
                       console.log("finalPrice", finalPrice)
                       document.querySelector(".app .wrapp .wrapp_button .wrapp_sum .value").innerText = finalPrice.toFixed(2) + " zł"
                       document.querySelector(".app .wrapp .wrapp_button .btn").addEventListener("click", ()=>{
-                             activeShopButton(selectedProducts)
-                             location.href = 'https://sklep563687.shoparena.pl/pl/basket'
-                         } )
+                        if(selectedProducts.every(el => el.can_buy)){
+                                activeShopButton(selectedProducts)
+                             	location.href = 'https://sklep563687.shoparena.pl/pl/basket'
+                        }
+                        else {
+                            clearScene()
+                            document.querySelector(".app .wrapp .wrapp_button .wrapp_sum").remove()
+                            const wrapp_chose_v2 = document.createElement("div")
+                            wrapp_chose_v2.classList.add("wrapp_chose_v2")
+                                const h1 = document.createElement("h1")
+                                h1.innerText = "Uwaga!"
+                                h1.style.color = "red";
+
+                                const h2a = document.createElement("h5")
+                                h2a.innerText = 'nie wszystkie pozycje znajdują się w naszych stanach magazynowych, dodając pozycję do koszyka, przedmioty ze stanem "brak towaru" nie zostaną dodane.'
+
+                                const br = document.createElement("br")
+
+                                const h2b = document.createElement("h5")
+                                h2b.innerText = 'wyślij e-mail ze swoim zamówieniem a nasz handlowiec zaproponuje alternatywną ofertę lub poinformuje o zbliżającej się dostawie'
+
+                            wrapp_chose_v2.appendChild(h1)
+                            wrapp_chose_v2.appendChild(h2a)
+                            wrapp_chose_v2.appendChild(br)
+                            wrapp_chose_v2.appendChild(h2b)
+
+                            const div = document.createElement("div")
+                                const sendEmail = document.createElement("button")
+                                sendEmail.classList.add("btn")
+                                sendEmail.innerText = "Wyślij email"
+                            div.appendChild(sendEmail)
+
+                            const btn = document.querySelector(".app .wrapp .wrapp_button")
+                            btn.prepend(div)
+                            document.querySelector(".app .wrapp").insertBefore(wrapp_chose_v2, btn)
+
+                            const btns = document.querySelectorAll(".app .wrapp .wrapp_button .btn")
+                            btns[0].addEventListener("click", ()=>{
+                                const inpEmail = document.createElement("input")
+                                inpEmail.type = "email"
+                                inpEmail.placeholder ="Podaj swój adres email"
+                                inpEmail.classList.add("emailInput")
+                                inpEmail.required = "true"
+                                inpEmail.style.margin = "0px 0px 30px 0px"
+                                inpEmail.style.height = "40px"
+                                let = email = "" 
+                                div.appendChild(inpEmail)
+                                
+                                btns[0].remove()
+                                const send = document.createElement("button")
+                                send.classList.add("btn")
+                                send.innerText = "Wyślij"
+                                send.style.margin = "0px 0px 30px 0px"
+                                div.prepend(send)
+                                // send.addEventListener("click", ()=>{
+                                //     let messageText = "Email: " + email + "<br>"
+                                //     selectedProducts.forEach(el=>{
+                                //         messageText += el.package + " x " + el.code + " " + el.availability.name + "<br>"
+                                //     })
+                                //     Email.send({
+                                //         Host : "poczta.interia.pl",
+                                //         Username : "kopsnijszluga@interia.pl",
+                                //         Password : "Power123",
+                                //         To : 'lukasz.pisarek@onled.pl',
+                                //         From : "kopsnijszluga@interia.pl",
+                                //         Subject : "Oferta ",
+                                //         Body : messageText
+                                //     })
+                                // })
+                                if(!validateEmail(email)){
+                                    send.style.background = "grey"
+                                    send.removeEventListener('click', sendEmailWithTheOrder)
+                                    send.disabled = true;
+                                }
+                                inpEmail.addEventListener("change", element=>{
+                                    email = element.target.value
+                                    if(validateEmail(email)){
+                                        send.style.background = "#ff7e00"
+                                        send.addEventListener('click', ()=>{
+                                            let messageText = "Email: " + email + "<br>"
+                                            selectedProducts.forEach(el=>{
+                                                messageText += el.package + " x " + el.code + " " + el.availability.name + "<br>"
+                                            })
+                                            Email.send({
+                                                Host : "poczta.interia.pl",
+                                                Username : "kopsnijszluga@interia.pl",
+                                                Password : "Power123",
+                                                To : 'lukasz.pisarek@onled.pl',
+                                                From : "kopsnijszluga@interia.pl",
+                                                Subject : "Oferta ",
+                                                Body : messageText
+                                            })
+                                            location.href = 'https://sklep563687.shoparena.pl'
+                                        } )
+                                        send.myParam = selectedProducts
+                                        send.disabled = false;
+                                    }
+                                    else{
+                                        send.style.background = "grey"
+                                        send.disabled = true;
+                                    }
+                                })
+                            })
+                            btns[1].addEventListener("click", ()=>{
+                                activeShopButton(selectedProducts)
+                                location.href = 'https://sklep563687.shoparena.pl/pl/basket'
+                            })
+                        }
+                      })
+
+
    
                      /*  const txt = document.createElement('p')
                        const p1 = document.createElement('p')
@@ -368,27 +568,72 @@
                    // chose.length = 0
                    break;
            }
+           function sendEmailWithTheOrder(selectedProducts, email){
+            let messageText = "Email: " + email + "<br>"
+            selectedProducts.forEach(el=>{
+                messageText += el.package + " x " + el.code + " " + el.availability.name + "<br>"
+            })
+            Email.send({
+                Host : "poczta.interia.pl",
+                Username : "kopsnijszluga@interia.pl",
+                Password : "Power123",
+                To : 'lukasz.pisarek@onled.pl',
+                From : "kopsnijszluga@interia.pl",
+                Subject : "Oferta ",
+                Body : messageText
+            })
+           }
+
+           function validateEmail(email) {
+            const reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/
+            if(!reg.test(email))
+                return false
+            else
+                return true
+            }
 
            function createBackButton(){
                 const backButton = document.createElement("button")
                 backButton.classList.add("btn")
                 backButton.innerText = "Powrót"
                 backButton.addEventListener("click", ()=>{
+                if(counterTitle <= 2) answers.pop()
+                if(counterTitle == 5) {
+                    counterTitle--
+                    answerNumber.pop()
+                }
                     counterTitle-=2
-                    console.log(withBtb)
-                    answers.pop()
                     answerNumber.pop()
                     changeScene()
                 })
                 return backButton
            }
+           function createNextButton(){
+            const nextButton = document.createElement("button")
+            nextButton.classList.add("btn")
+            nextButton.innerText = "Dalej"
+            nextButton.addEventListener("click", nextPage)
+            return nextButton
+       }
+           function resetNextButton(){
+            deleteNextButton()
+            const wrapp_btn = document.querySelector(".app .wrapp .wrapp_button")
+            wrapp_btn.appendChild( createNextButton() )
+           }
            function addBackButton(){
-                deleteBackButton()
-                const wrapp_btn = document.querySelector(".app .wrapp .wrapp_button")
-                const btnNext = wrapp_btn.querySelector(".btn")
-                wrapp_btn.insertBefore(createBackButton(), btnNext)
+            deleteBackButton()
+            const wrapp_btn = document.querySelector(".app .wrapp .wrapp_button")
+            const btnNext = wrapp_btn.querySelector(".btn")
+            wrapp_btn.insertBefore(createBackButton(), btnNext)
 
            }
+           function deleteNextButton(){
+            const wrapp_btn = document.querySelector(".app .wrapp .wrapp_button")
+            const btn = wrapp_btn.querySelectorAll(".btn")
+            if(btn.length>1){
+                btn[1].remove()
+            }
+       }
            function deleteBackButton(){
                 const wrapp_btn = document.querySelector(".app .wrapp .wrapp_button")
                 const btn = wrapp_btn.querySelectorAll(".btn")
@@ -423,21 +668,21 @@
    
            function validation(){
                const inp = document.querySelectorAll('.app input')
-               const sub = document.querySelector('.app .wrapp_button .btn')
+               const sub = document.querySelectorAll('.app .wrapp_button .btn')
                let counter = 0
                inp.forEach(el=>{
                if(el.validity.valid) counter++
                })
                if(counter === inp.length){
-               sub.style.background = "#ff7e00"
-               sub.addEventListener('click', nextPage)
-               sub.disabled = false;
+               sub[1].style.background = "#ff7e00"
+               sub[1].addEventListener('click', nextPage)
+               sub[1].disabled = false;
                withBtb = input
                }
                else {
-                   sub.style.background = "grey"
-                   sub.removeEventListener("click", nextPage)
-                   sub.disabled = true}
+                   sub[1].style.background = "grey"
+                   sub[1].removeEventListener("click", nextPage)
+                   sub[1].disabled = true}
            }
    
            function deleteScene(){
@@ -454,6 +699,7 @@
                const text1 = createFormField("Długość odcinka A w metrach", "0.1" , "0.1")
                const text2 = createFormField("Długość odcinka B w metrach", "0.1" , "0.1")
                const text4 = createFormField("Długość odcinka C w metrach", "0.1" , "0.1")
+               const text5 = createFormField("Długość odcinka D w metrach", "0.1" , "0.1")
                const text3 = createFormField("Ilość punktów świetlnych:", "1" , "0")
    
                wrapp.appendChild(canvas)
@@ -464,9 +710,11 @@
                    wrapp.appendChild(text1)
                    wrapp.appendChild(text2)
                }
-               if(answer === '2'){
+               if(answer === '1' || answer === '2' || answer === '4'){ // 1,2,4
                    wrapp.appendChild(text4)
                }
+               if(answer === '2') wrapp.appendChild(text5)
+
                wrapp.appendChild(text3)
            }
    
@@ -548,16 +796,30 @@
        }
        function changeSizePhotoWrappForCanva(){
            const btn_wrapp_photo = document.querySelectorAll(".app .btn_wrapp_photo")
-           btn_wrapp_photo.forEach(el=>{
-               //el.style.width = "10vw"
-               el.style.height = "10vw"
-           })
+           function changeSize(x) {
+            if (x.matches) { // If media query matches
+                btn_wrapp_photo.forEach(el=>{
+                    el.style.height = "20vw"
+                    el.style.width = "20vw"
+                    el.style.margin = "5px 5px"
+                })
+            } else {
+                btn_wrapp_photo.forEach(el=>{
+                    el.style.height = "9vw"
+                    el.style.width = "9vw"
+                    el.style.margin = "5px 5px"
+                })
+            }
+          }
+            let x = window.matchMedia("(max-width: 640px)")
+            changeSize(x) // Call listener function at run time
+            x.addEventListener("change", changeSize) // Attach listener function on state changes
        }
        function buildCanvaStructur(){
            const wrapp_chose_v2 = document.createElement("div")
            wrapp_chose_v2.classList.add("wrapp_chose_v2")
-               const wrapp_chose1 = buildWrapp_choseForCanva(["0","1"])
-               const wrapp_chose2 = buildWrapp_choseForCanva(["2","3"])
+               const wrapp_chose1 = buildWrapp_choseForCanva(["0","1","2"])
+               const wrapp_chose2 = buildWrapp_choseForCanva(["3","4","5"])
            wrapp_chose_v2.appendChild(wrapp_chose1)
            wrapp_chose_v2.appendChild(wrapp_chose2)
            return wrapp_chose_v2
@@ -565,37 +827,29 @@
        function clearScene(){   
            if(document.querySelector(".app .wrapp_chose_v2") ){
             document.querySelector(".app .wrapp_chose_v2").remove()
-            styleToggle = !styleToggle
+            // styleToggle = !styleToggle
            }
-           else{
+           else if(document.querySelector(".app .wrapp_chose") ){
             document.querySelector(".app .wrapp_chose").remove()
-           }  
+           }
+           else null
             // document.querySelector(".app .wrapp_chose")? document.querySelector(".app .wrapp_chose").remove() : document.querySelector(".app .wrapp_chose_v2").remove()
        }
        function buildWrapp_choseForCanva(id){
            const wrapp_chose = document.createElement("div")
                      wrapp_chose.classList.add("wrapp_chose")
-                         const btn_wrapp_photo1 = document.createElement("button")
-                         btn_wrapp_photo1.classList.add("btn_wrapp_photo")
-                         btn_wrapp_photo1.id = id[0];
-                             const photo_title1 = document.createElement("h3")
-                             photo_title1.classList.add("photo_title")
-                             const canv1 = document.createElement("canvas")
-                             canv1.classList.add("canv")
-                         btn_wrapp_photo1.appendChild(photo_title1)
-                         btn_wrapp_photo1.appendChild(canv1)
-                         
-                         const btn_wrapp_photo2 = document.createElement("button")
-                         btn_wrapp_photo2.classList.add("btn_wrapp_photo")
-                         btn_wrapp_photo2.id = id[1];
-                         const photo_title2 = document.createElement("h3")
-                         photo_title2.classList.add("photo_title")
-                             const canv2 = document.createElement("canvas")
-                             canv2.classList.add("canv")
-                         btn_wrapp_photo2.appendChild(photo_title2)
-                         btn_wrapp_photo2.appendChild(canv2)
-                     wrapp_chose.appendChild(btn_wrapp_photo1)
-                     wrapp_chose.appendChild(btn_wrapp_photo2)
+                        for(let i = 0; i < id.length; i++){
+                            const btn_wrapp_photo = document.createElement("button")
+                            btn_wrapp_photo.classList.add("btn_wrapp_photo")
+                            btn_wrapp_photo.id = id[i];
+                                const photo_title1 = document.createElement("h3")
+                                photo_title1.classList.add("photo_title")
+                                const canv1 = document.createElement("canvas")
+                                canv1.classList.add("canv")
+                            btn_wrapp_photo.appendChild(photo_title1)
+                            btn_wrapp_photo.appendChild(canv1)
+                            wrapp_chose.appendChild(btn_wrapp_photo)
+                        }
            return wrapp_chose
        }
    
@@ -976,7 +1230,8 @@
            wrapp.appendChild(wrapp_title)
            wrapp.appendChild(wrapp_chose)
            wrapp.appendChild(wrapp_button)
-       main.appendChild(wrapp)
+
+        main.appendChild(wrapp)
    
        document.querySelector("body").appendChild(main)
        addInformation()
