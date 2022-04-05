@@ -86,8 +86,8 @@
 }
 
 .app .wrapp .btn_wrapp_photo .photo_title {
-  font-size: 1vw;
-  line-height: 1vw;
+  font-size: 3vw;
+  line-height: 3vw;
 }
 
 .app .wrapp .btn_wrapp_photo .image {
@@ -109,14 +109,15 @@
 .app .wrapp .btn_wrapp_photo .information::after {
   content: attr(data-after);
   font-family: roboto;
-  font-size: 1.2vw;
+  font-size: 3.2vw;
+  line-height: 4vw;
   font-style: normal;
   color: black;
   display: block;
   position: absolute;
   top: -28vw;
-  left: -27vw;
-  width: 30vw;
+  left: -26vw;
+  width: 28.5vw;
   height: 32vw;
   padding-top: 20px;
   background-color: white;
@@ -136,33 +137,35 @@
   height: 20%;
 }
 
-.app .wrapp .wrapp_button .btn {
+.app .wrapp .btn {
   background: #ff7e00;
   border: 0;
   color: #fff;
   padding: 13px;
-  margin: 30px;
+  margin: 0px 30px 30px 0px;
   letter-spacing: 3px;
   font-weight: bold;
 }
 
-.app .wrapp .wrapp_button .btn:hover {
+.app .wrapp .btn:hover {
   cursor: pointer;
 }
 
 .app .wrapp .wrapp_button .wrapp_sum {
   display: flex;
+  flex-flow: column;
   align-self: center;
   margin-left: 4%;
+  width: 60%;
 }
 
 .app .wrapp .wrapp_button .wrapp_sum .sum {
-  font-size: 25px;
+  font-size: 5vw;
 }
 
 .app .wrapp .wrapp_button .wrapp_sum .value {
-  margin-left: 10px;
-  font-size: 26px;
+  margin: 10px;
+  font-size: 5vw;
   font-weight: bold;
   color: #67B331;
 }
@@ -210,7 +213,7 @@
 
 .app .wrapp_chose .wrapp_lamps .lamp .justLeft .price {
   color: #67B331;
-  font-size: 1.3vw;
+  font-size: 4.3vw;
   font-weight: bold;
 }
 
@@ -252,10 +255,10 @@
   box-shadow: 0px 0px 8px 0.5px #42445a;
 }
 
-@media screen and (min-width: 640px) {
+@media screen and (min-width: 860px) {
   .app .wrapp {
-    width: 30vw;
-    height: 30vw;
+    width: 32vw;
+    height: 35vw;
   }
   .app .wrapp .btn_wrapp_photo {
     width: 13vw;
@@ -264,13 +267,74 @@
   .app .wrapp .btn_wrapp_photo .image {
     height: 55%;
   }
+  .app .wrapp .btn_wrapp_photo .photo_title {
+    font-size: 1vw;
+    line-height: 1vw;
+  }
   .app .wrapp .btn_wrapp_photo .information {
     font-size: 2vw;
   }
   .app .wrapp .btn_wrapp_photo .information::after {
+    font-size: 1.2vw;
+    line-height: 2vw;
     width: 11vw;
     height: 15vw;
     top: -12.32vw;
     left: -9.6vw;
   }
+  .app .wrapp .wrapp_button .wrapp_sum {
+    display: flex;
+    flex-flow: row;
+    align-self: center;
+    margin-left: 4%;
+    width: auto;
+  }
+  .app .wrapp .wrapp_button .wrapp_sum .sum {
+    font-size: 25px;
+  }
+  .app .wrapp .wrapp_button .wrapp_sum .value {
+    margin: 0px;
+    margin-left: 10px;
+    font-size: 26px;
+    font-weight: bold;
+    color: #67B331;
+  }
+  .app .wrapp_chose .wrapp_lamps .lamp .justLeft .price {
+    font-size: 1.3vw;
+  }
+}
+
+.wrappForPhoto{
+  position: relative;
+  height: 60%;
+  width: 70%;
+  /* margin-bottom: 2vw; */
+}
+.temperature{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 20;
+}
+.brightness{
+  object-fit: cover;
+  object-position: 100% 20%;
+  width: 100%;
+  height: 100%;
+}
+
+.rangeInp{
+  width: 60%;
+  /* margin: 1.2vw; */
+}
+.range{
+  display: flex;
+  justify-content: space-between;
+  width: 70%;
+}
+.wrappDecide{
+  width: 60%;
+  height:40%;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  padding: 20px;
 }

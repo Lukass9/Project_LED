@@ -1,3 +1,4 @@
+import {obj, products} from "./data.js"
 /* 
    1-fazowe id
    lampy 62
@@ -6,7 +7,11 @@
    lampy 264
    szyny i łączniki 275
    */
+
+   
    function app(){
+
+
     const answerNumber = []
     const answers = []
     let withBtb;
@@ -18,9 +23,9 @@
     changeScene()
 
        class AllShapesCanvas {
-           static setSizeCanva(element) {
-               element.width = btnWrap[0].offsetWidth
-               element.height = btnWrap[0].offsetWidth * 0.8;
+           static setSizeCanva(element, btn) {
+               element.width = btn.offsetWidth
+               element.height = btn.offsetWidth * 0.8;
            }
            static paintLine(ctx, canv) {
                ctx.beginPath();
@@ -137,7 +142,7 @@
                btnWrap.forEach((btn, i) => {
                    const canv = btn.querySelector(".canv")
                    const ctx = canv.getContext("2d");
-                   AllShapesCanvas.setSizeCanva(canv)
+                   AllShapesCanvas.setSizeCanva(canv, btn)
                    switch (i) {
                        case 0: AllShapesCanvas.paintLine(ctx, canv)
                            break;
@@ -158,9 +163,7 @@
 
     function changeScene() {
         const title = ["Wybierz rodzaj zasilania", "Wybierz źródło światła", "Wybierz  kolor", "", "Schemat ułożenia", "", "Wybierz Lampę", "Podsumowanie"]
-        const productTitle = [["Oświetlenie 1-fazowe","Oświetlenie 3-fazowe"],["Reflektor na żarówkę", "Zintegrowane źródło światła"], ["Biała", "Czarna"], ["Kreator automatyczny", "Kreator manualny"], ["Linia prosta", "Litera L", "Litera U", "Czworokąt"]]
-        const step = document.querySelector(".app .step");
-        let photoWrap = document.querySelectorAll(".app .btn_wrapp_photo")
+        const productTitle = [["Oświetlenie 1-fazowe","Oświetlenie 3-fazowe"],["Reflektor na żarówkę", "Zintegrowane źródło światła"], ["Biała", "Czarna"], ["Kreator automatyczny", "Kreator manualny"], ["Linia prosta", "Litera T", "Litera X", "Litera L", "Litera U", "Czworokąt"]]
         let input = []
         
         switch (counterTitle) {
@@ -173,7 +176,7 @@
                     "Dzięki temu podłączeniu możesz oświetlać 3 strefy za pomocą trzech różnych przełączników"])
                 addFirstButton(productTitle[0])
                 deleteBackButton()
-                break;
+                break;     
             case 1:
                 resetStruct(buildBasicStructWitchButton())
                 addTextToStep() 
@@ -247,7 +250,7 @@
                 validation()
                 const inp = document.querySelectorAll('.app input')
                 inp.forEach((el,i)=>{
-                    el.addEventListener("change", validation)
+                    el.addEventListener("input", validation)
                     el.addEventListener("change", ()=>{ // setInputValue
                         input[i] =  +el.value
                         console.log(input[i])
@@ -291,23 +294,27 @@
                 break;
             case 6:
                 addTextToStep()
-                document.querySelector(".app .wrapp_chose_v2").remove()
+                // document.querySelector(".app .wrapp_chose_v2") ? document.querySelector(".app .wrapp_chose_v2").remove() : 
+                //     document.querySelector(".app .wrapp .wrapp_chose").remove()
                 // const scene = document.querySelector(".app .wrapp_chose_v2")
                 // scene.remove()
-            
-                const lamps = getChoseProducts(...answers)
+                
+                const lampers = products
+                resetStruct(buildChoseStructApp(lampers))
                 // console.log(lamps)
-                const lampsScene = buildChoseStructApp(lamps)
-                const wrapp_chose = document.createElement("div")
-                wrapp_chose.classList.add("wrapp_chose")
-                wrapp_chose.appendChild(lampsScene)
-                document.querySelector(".app .wrapp_title").after(wrapp_chose)
-                activeButton()
+                //const lampsScene = buildChoseStructApp(lampers)
+                
+            // activeButton()
+                addBackButton()
 
+                const nextBtn = document.querySelector(".app .wrapp .wrapp_button button:nth-child(2)")
+                nextBtn.removeEventListener("click", nextPage)
+                nextBtn.addEventListener("click", askAboutBulbs)
                 //const lampki2 = getChoseProducts(...answers)
                 //console.log(lampki2[0])
                 //loadLamp(lampki2[0])
-                deleteBackButton()
+                // deleteBackButton()
+                // addBackButton()
                 break;
             case 7:
                 addTextToStep()
@@ -419,40 +426,39 @@
                    console.log("answerNumber[0]", answerNumber[0])
                    const phase = answerNumber[0]=="0" ? 63 : 275
                    console.log("phase", phase)
-                   const productsFromCategory = frontAPI.getProductsFromCategory({
-                       id: phase, // 63 , 275
-                       urlParams: '?limit=50'
-                   })
+
+                const selectedProducts = obj
+
+
+
+        
+                resetStruct(buildChoseStructApp(selectedProducts))     
+                //    const categoryProduct = buildChoseStructApp(selectedProducts)
+                //    const wrapp_chose2 = document.createElement("div")
+                //    wrapp_chose2.classList.add("wrapp_chose")
+                //    wrapp_chose2.appendChild(categoryProduct)
+                //    document.querySelector(".app .wrapp_title").after(wrapp_chose2)
                    
-                  const selectedProducts = []
-                   productsFromCategory.list.map(product => {
-                       product.name = product.name.toLowerCase()
-                       RailsAndConecctors.forEach(railOrConecctor=>{
-                           if(railOrConecctor.value>0){
-                             const color = answers[answers.length-1]
-                             if(product.name.includes(color.substring(0, color.length-1) ) && product.name.includes(railOrConecctor.name) && !selectedProducts.some(el => el.name.includes(railOrConecctor.name)) ){
-                                      product.package = railOrConecctor.value
-                                      selectedProducts.push(product)
-                                  }
-                           }
-                       })
-                   })
-                   
-                   const product = frontAPI.getProduct({id: answerNumber[answerNumber.length-1]})
-                   
-                   //consoloe.log("product.package = answers[5][answers[5].length-1]", answers[5])
-                   product.package = answerNumber[5][answerNumber[5].length-1]
-                   
-                   //console.log("product", product)
-                   //console.log("answerNumber[answerNumber.length-1]", answerNumber[answerNumber.length-1])
-                   selectedProducts.unshift(product)
-                       
-                   const categoryProduct = buildChoseStructApp(selectedProducts)
-                   const wrapp_chose2 = document.createElement("div")
-                   wrapp_chose2.classList.add("wrapp_chose")
-                   wrapp_chose2.appendChild(categoryProduct)
-                   document.querySelector(".app .wrapp_title").after(wrapp_chose2)
-                   
+                function askAboutBulbs(){
+                    clearScene()
+                    const decide = buildDecide()
+                    const btn = decide.querySelectorAll("button")
+                    btn[0].addEventListener("click", bubleCreator)
+                    btn[1].addEventListener("click", nextPage)
+                    document.querySelector(".app").appendChild( buildBasicStruct() )
+                    const wrapp = document.querySelector(".app .wrapp")
+                    const chose = wrapp.querySelector(".wrapp_chose")
+                    chose.appendChild(decide)
+                    // wrapp.replaceChild(decide,chose)
+                }
+                function bubleCreator(){
+                    resetStruct(buildBasicStruct())
+                    const wrapp = document.querySelector(".app .wrapp")
+                    const chose = wrapp.querySelector(".wrapp_chose")
+                    wrapp.replaceChild(BuildCreatorLight(), chose )
+                    addBackButton()
+                }
+                addBackButton()
                    changeToFinallStruct()
                    loadValue(selectedProducts)
                    const finalPrice = calculatePrice(selectedProducts)
@@ -504,7 +510,7 @@
                              inpEmail.required = "true"
                              inpEmail.style.margin = "0px 0px 30px 0px"
                              inpEmail.style.height = "40px"
-                             let = email = "" 
+                             let email = "" 
                              div.appendChild(inpEmail)
                              
                              btns[0].remove()
@@ -513,21 +519,7 @@
                              send.innerText = "Wyślij"
                              send.style.margin = "0px 0px 30px 0px"
                              div.prepend(send)
-                             // send.addEventListener("click", ()=>{
-                             //     let messageText = "Email: " + email + "<br>"
-                             //     selectedProducts.forEach(el=>{
-                             //         messageText += el.package + " x " + el.code + " " + el.availability.name + "<br>"
-                             //     })
-                             //     Email.send({
-                             //         Host : "poczta.interia.pl",
-                             //         Username : "kopsnijszluga@interia.pl",
-                             //         Password : "Power123",
-                             //         To : 'lukasz.pisarek@onled.pl',
-                             //         From : "kopsnijszluga@interia.pl",
-                             //         Subject : "Oferta ",
-                             //         Body : messageText
-                             //     })
-                             // })
+
                              if(!validateEmail(email)){
                                  send.style.background = "grey"
                                  send.removeEventListener('click', sendEmailWithTheOrder)
@@ -568,45 +560,9 @@
                          })
                      }
                    })
-
-
-
-                  /*  const txt = document.createElement('p')
-                    const p1 = document.createElement('p')
-                    const p2 = document.createElement('p')
-                    const p3 = document.createElement('p')
-                    const p4 = document.createElement('p')
-                    const connector = document.createElement('p')
-                    const connectorL = document.createElement('p')
-                    const elWrapp = document.createElement('div')
-                    elWrapp.className = "wrapp_chose_v2"
-                    
-                    txt.innerText = "Twój zestaw szynowy"
-                    p1.innerText = "Listwa szynowa 1m: " + calc[0]   
-                    p2.innerText = "Listwa szynowa 1.5m: " + calc[1]
-                    p3.innerText = "Listwa szynowa 2m: " + calc[2]
-                    p4.innerText = "Zostaje Ci reszty: " + calc[3].toFixed(2) 
-                    connector.innerText = "łączników prostych: " + calc[4]
-                    connectorL.innerText = "łączników kątowych: " + connL
-                    
-                    elWrapp.appendChild(txt)
-                    elWrapp.appendChild(p1)
-                    elWrapp.appendChild(p2)
-                    elWrapp.appendChild(p3)
-                    elWrapp.appendChild(p4)
-                    elWrapp.appendChild(connector)
-
-                    document.querySelector(".app .wrapp_title").after(elWrapp) */
-
-                    //const lampki = getChoseProducts(...answers)
-                    //console.log(lampki)
                 break;
             default:
-                // changeStyles(styleToggle)
-                // styleToggle = !styleToggle 
-                // counterTitle = -1;
-                // answers.length = 0
-                // chose.length = 0
+            
                 break;
         }
         function sendEmailWithTheOrder(selectedProducts, email){
@@ -663,10 +619,9 @@
         }
         function addBackButton(){
          deleteBackButton()
-         const wrapp_btn = document.querySelector(".app .wrapp .wrapp_button")
+         const wrapp_btn = document.querySelector(".app .wrapp .wrapp_button div")
          const btnNext = wrapp_btn.querySelector(".btn")
          wrapp_btn.insertBefore(createBackButton(), btnNext)
-
         }
         function deleteNextButton(){
          const wrapp_btn = document.querySelector(".app .wrapp .wrapp_button")
@@ -813,10 +768,9 @@
             const step = document.querySelector(".app .step");
             step.innerText = title[counterTitle] ? title[counterTitle] : ''
         }
-
         function addFirstButton(lampsTitle){
             const photoWrapp = document.querySelectorAll(".app .btn_wrapp_photo")
-            const lampsPhotos = ["https://onled.pl/environment/cache/images/400_400_productGfx_3827/2872.png","https://onled.pl/environment/cache/images/400_400_productGfx_3067/5x-Lampa-3-fazowa-25W---szyna-allegro-zestaw-czarna.jpg"]
+            const lampsPhotos = ["https://onled.pl/public/assets/onled/wy%C5%82%C4%85cznik_pojedynczy.png","https://onled.pl/public/assets/onled/wy%C5%82%C4%85cznik_potr%C3%B3jny.png"]
             photoWrapp.forEach((el,i) => {
                 const title = el.querySelector("h3")
                 const img = el.querySelector("img")
@@ -931,7 +885,7 @@
         console.log("...answers", ...answers)
     }
     function activeButton(){
-        btnWrap = document.querySelectorAll('.btn_wrapp_photo').length ? document.querySelectorAll('.btn_wrapp_photo') : document.querySelectorAll('.lamp') 
+        const btnWrap = document.querySelectorAll('.btn_wrapp_photo').length ? document.querySelectorAll('.btn_wrapp_photo') : document.querySelectorAll('.lamp') 
         console.log("activeButton", btnWrap)
         btnWrap.forEach(btn => {
             btn.addEventListener('focus', (e) => {
@@ -953,7 +907,7 @@
         withBtb = null
     }
     function addFunctionNextPageToButton(){
-        btnSub = document.querySelectorAll('.app .wrapp .wrapp_button .btn')  
+        const btnSub = document.querySelectorAll('.app .wrapp .wrapp_button .btn')  
         btnSub[1].addEventListener('click', nextPage)
     }
     function getChoseProducts(whichPhase = 62, kindOfLight = "COB", whichColor = "czarny" ) {
@@ -1077,9 +1031,10 @@ function changeToFinallStruct(){
         })
     }
     const sum = createSum()
-    const btn = document.querySelector(".app .wrapp .wrapp_button .btn")
-    btn.innerText = "Zamawiam"
-    document.querySelector(".app .wrapp .wrapp_button").insertBefore(sum, btn)
+    const btn = document.querySelectorAll(".app .wrapp .wrapp_button .btn")
+    const div = document.querySelector(".app .wrapp .wrapp_button div")
+    btn[1].innerText = "Zamawiam"
+    document.querySelector(".app .wrapp .wrapp_button").insertBefore(sum, div)
     
     const lamps = document.querySelectorAll(".app .wrapp_chose .wrapp_lamps .lamp")
     lamps.forEach((lamp,i)=>{
@@ -1106,53 +1061,54 @@ function loadLamp(lamp){
     const price = document.querySelector(".app .lamp .price")
     price.innerText = lamp.price.gross.base  
 }
-    function buildChoseStructApp(lamps){
-           function changeAvaiilabilityColor(avaiblityHTML, productName){
-               if(productName.includes("Brak") || productName.includes("wyczerpaniu") ){
-                   avaiblityHTML.style.color = "red"
-               }
-               else if(productName.includes("średnia")){
-                   avaiblityHTML.style.color = "orange"
-               }
-           }
-   
-          const wrapp_lamps = document.createElement("div")
-          wrapp_lamps.classList.add("wrapp_lamps")
-          const urlIMG = 'https://onled.pl/userdata/public/gfx/'
-          lamps.forEach((el)=>{
-              const lamp = document.createElement("button")
-                  lamp.classList.add("lamp")
-                  lamp.id = el.id
-                      const lampImg = document.createElement("img")
-                      lampImg.classList.add("lampImg")
-                      lampImg.src = urlIMG + el.main_image_filename
-                      const justLeft = document.createElement("div")
-                      justLeft.classList.add("justLeft")
-                          const p = document.createElement("p")
-                          p.innerText = el.name
-                          const textTogether = document.createElement("div")
-                          textTogether.classList.add("textTogether")
-                              const p1 = document.createElement("p")
-                              p1.innerText = "Dostępność: "
-                              const avaiblity = document.createElement("p")
-                              avaiblity.classList.add("avaiblity")
-                              avaiblity.innerText = el.availability.name
-                              changeAvaiilabilityColor(avaiblity, el.availability.name)
-                          textTogether.appendChild(p1)
-                          textTogether.appendChild(avaiblity)
-                          const price = document.createElement("p")
-                          price.classList.add("price")
-                          price.innerText = el.price.gross.base
-                      justLeft.appendChild(p)
-                      justLeft.appendChild(textTogether)
-                      justLeft.appendChild(price)
-                  lamp.appendChild(lampImg)
-                  lamp.appendChild(justLeft)
-              wrapp_lamps.appendChild(lamp) 
-              })
-      
-          return wrapp_lamps
-      } 
+function buildChoseStructApp(lamps){
+    const wrapp = buildBasicStruct()
+        function changeAvaiilabilityColor(avaiblityHTML, productName){
+            if(productName.includes("Brak") || productName.includes("wyczerpaniu") ){
+                avaiblityHTML.style.color = "red"
+            }
+            else if(productName.includes("średnia")){
+                avaiblityHTML.style.color = "orange"
+            }
+        }
+
+        const wrapp_lamps = document.createElement("div")
+        wrapp_lamps.classList.add("wrapp_lamps")
+        const urlIMG = 'https://onled.pl/userdata/public/gfx/'
+        lamps.forEach((el)=>{
+            const lamp = document.createElement("button")
+                lamp.classList.add("lamp")
+                lamp.id = el.id
+                    const lampImg = document.createElement("img")
+                    lampImg.classList.add("lampImg")
+                    lampImg.src = urlIMG + el.main_image_filename
+                    const justLeft = document.createElement("div")
+                    justLeft.classList.add("justLeft")
+                        const p = document.createElement("p")
+                        p.innerText = el.name
+                        const textTogether = document.createElement("div")
+                        textTogether.classList.add("textTogether")
+                            const p1 = document.createElement("p")
+                            p1.innerText = "Dostępność: "
+                            const avaiblity = document.createElement("p")
+                            avaiblity.classList.add("avaiblity")
+                            avaiblity.innerText = el.availability.name
+                            changeAvaiilabilityColor(avaiblity, el.availability.name)
+                        textTogether.appendChild(p1)
+                        textTogether.appendChild(avaiblity)
+                        const price = document.createElement("p")
+                        price.classList.add("price")
+                        price.innerText = el.price.gross.base
+                    justLeft.appendChild(p)
+                    justLeft.appendChild(textTogether)
+                    justLeft.appendChild(price)
+                lamp.appendChild(lampImg)
+                lamp.appendChild(justLeft)
+            wrapp_lamps.appendChild(lamp) 
+            })
+    wrapp.childNodes[1].appendChild(wrapp_lamps)
+    return wrapp
+} 
 function addTextToInformation(text){
     document.querySelectorAll(".wrapp_chose .btn_wrapp_photo").forEach((el,i)=>{
       el.querySelector(".information").addEventListener("mouseover", (e)=>{
@@ -1200,6 +1156,90 @@ function buildWrappChose_v2Struct(){
     wrapp_chose.classList.add("wrapp_chose_v2")
     return wrapp_chose
 }
+function BuildCreatorLight(){
+    const wrapp_chose_v2 = document.createElement("div")
+    wrapp_chose_v2.classList.add("wrapp_chose_v2")
+        const wrappForPhoto = document.createElement("div")
+        wrappForPhoto.classList.add("wrappForPhoto")
+            const temperature = document.createElement("div")
+            temperature.classList.add("temperature")
+            const brightness = document.createElement("img")
+            brightness.classList.add("brightness")
+            brightness.src = "https://onled.pl/userdata/public/gfx/2210/Lampa-ECO-czarna-wizualizacja.jpg"
+        wrappForPhoto.appendChild(temperature)  
+        wrappForPhoto.appendChild(brightness)  
+
+        const range1 = document.createElement("div")
+        range1.classList.add("range")
+            const p1 = document.createElement("p")
+            p1.innerText = "CIEPŁA"
+            const p2 = document.createElement("p")
+            p2.innerText = "NEUTRALNA"
+            const p3 = document.createElement("p")
+            p3.innerText = "ZIMNA"
+        range1.appendChild(p1)
+        range1.appendChild(p2)
+        range1.appendChild(p3)
+
+        const inp1 = document.createElement("input")
+        inp1.type = "range"
+        inp1.min = "-0.050"
+        inp1.max = "0.050"
+        inp1.step = "0.001"
+        inp1.value ="0"
+        inp1.classList.add("rangeInp")
+
+        const label1 = document.createElement("label")
+        label1.innerText = "Barwa Światła"
+
+        const range2 = document.createElement("div")
+        range2.classList.add("range")
+            const pa1 = document.createElement("p")
+            pa1.innerText = "SŁABA"
+            const pa2 = document.createElement("p")
+            pa2.innerText = "MOCNA"
+        range2.appendChild(pa1)
+        range2.appendChild(pa2)
+
+        const inp2 = document.createElement("input")
+        inp2.type = "range"
+        inp2.min = "80"
+        inp2.max = "120"
+        inp2.step = "1"
+        inp2.value ="100"
+        inp2.classList.add("rangeInp")
+
+        const label2 = document.createElement("label")
+        label2.innerText = "Jasność"
+    wrapp_chose_v2.appendChild(wrappForPhoto)
+    wrapp_chose_v2.appendChild(range1)
+    wrapp_chose_v2.appendChild(inp1)
+    wrapp_chose_v2.appendChild(label1)
+    wrapp_chose_v2.appendChild(range2)
+    wrapp_chose_v2.appendChild(inp2)
+    wrapp_chose_v2.appendChild(label2)
+
+    return wrapp_chose_v2
+}
+
+ function buildDecide(){
+    const wrappDecide = document.createElement("div")
+    wrappDecide.classList.add("wrappDecide")
+        const p = document.createElement("p")
+        p.innerText="Czy chcesz dodać żarówki do zestawu?"
+        const but1 = document.createElement("button")
+        but1.classList.add("btn")
+        but1.innerText = "TAK"
+        const but2 = document.createElement("button")
+        but2.classList.add("btn")
+        but2.innerText = "NIE"
+    wrappDecide.appendChild(p)
+    wrappDecide.appendChild(but1)
+    wrappDecide.appendChild(but2)
+    return wrappDecide
+}
+
+
 function buildbtn_wrapp_photoStruct(index) {
     const btn_wrapp_photo = document.createElement("button")
     btn_wrapp_photo.classList.add("btn_wrapp_photo")
@@ -1217,14 +1257,16 @@ function buildbtn_wrapp_photoStruct(index) {
 function buildWrapp_buttonStruct(){
     const wrapp_button = document.createElement("div")
         wrapp_button.classList.add("wrapp_button")
-            const btn = document.createElement("button")
-                btn.classList.add("btn")
-                btn.innerText = "Dalej"
-            const backButton = document.createElement("button")
-                backButton.classList.add("btn")
-                backButton.innerText = "Powrót"
-        wrapp_button.appendChild(backButton)
-        wrapp_button.appendChild(btn)
+            const div = document.createElement("div")
+                const btn = document.createElement("button")
+                    btn.classList.add("btn")
+                    btn.innerText = "Dalej"
+                const backButton = document.createElement("button")
+                    backButton.classList.add("btn")
+                    backButton.innerText = "Powrót"
+            div.appendChild(backButton)
+            div.appendChild(btn)
+        wrapp_button.appendChild(div)
     return wrapp_button
 }
 function buildBasicStructWitchButton(){
@@ -1251,7 +1293,6 @@ function buildBasicStruct(){
         wrapp.appendChild(wrapp_button) 
     return wrapp
 }
-
 function buildCanvaStructur(){
     const wrapp = buildBasicStruct()
     const wrapp_chose_v2 = wrapp.childNodes[1]
@@ -1264,7 +1305,6 @@ function buildCanvaStructur(){
     // wrapp.appendChild(wrapp_chose_v2)
     return wrapp
 }
-
 function buildWrapp_choseForCanva(id){
     const wrapp_chose = document.createElement("div")
               wrapp_chose.classList.add("wrapp_chose")
@@ -1282,7 +1322,6 @@ function buildWrapp_choseForCanva(id){
                  }
     return wrapp_chose
 }
-
 function buildStartStructApplication(){
     const main = document.createElement("main")
     main.classList.add("app")
@@ -1291,7 +1330,7 @@ function buildStartStructApplication(){
 
     document.querySelector("body").appendChild(main)
     addInformation()
-    }   
+}   
 const lamps = [
         {
             id: "62",
@@ -1449,3 +1488,4 @@ const lamps = [
     ]
 
 app()
+

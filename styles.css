@@ -75,16 +75,16 @@
     align-items: flex-end;
     height: 20%;
 }
-.app .wrapp .wrapp_button .btn {
+.app .wrapp  .btn {
     background: #ff7e00;
     border: 0;
     color: #fff;
     padding: 13px;
-    margin: 30px;
+    margin: 30px 10px;
     letter-spacing: 3px;
     font-weight: bold;
 }
-.app .wrapp .wrapp_button .btn:hover {
+.app .wrapp  .btn:hover {
     cursor: pointer;
 }
 .app .wrapp_chose .wrapp_lamps {
